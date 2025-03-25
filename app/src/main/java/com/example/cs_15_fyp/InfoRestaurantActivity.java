@@ -33,13 +33,10 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         // Connect to views
         EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
-        RatingBar restaurantRating = findViewById(R.id.restaurantRating);
-        ImageView restaurantLogo = findViewById(R.id.restaurantLogo);
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
 
         // Set dummy restaurant info
         restaurantName.setText("Delicious Dumplings");
-        restaurantRating.setRating(4.5f);
 
         // Dummy review data
         List<Review> reviews = new ArrayList<>();
