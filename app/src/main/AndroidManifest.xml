@@ -13,10 +13,13 @@
         android:theme="@style/Theme.CS15FYP"
         tools:targetApi="31">
         <activity
+            android:name=".InfoRestaurantActivity"
+            android:exported="false" />
+        <activity
             android:name=".GiveReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".RestInfo"
+            android:name=".MainActivity"
             android:exported="false" />
     </application>
 
