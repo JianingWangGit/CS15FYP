@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="#F9F9F9"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/reviewUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="user123"
+        android:textStyle="bold"
+        android:textSize="14sp" />
+
+    <RatingBar
+        android:id="@+id/reviewRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:isIndicator="true"
+        android:layout_marginTop="4dp"
+        android:progressTint="#00BCD4" />
+
+    <TextView
+        android:id="@+id/reviewText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amazing food, loved the vibe!"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+</LinearLayout>
