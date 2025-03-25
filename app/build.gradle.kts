@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-
+    implementation("org.mongodb:mongodb-driver-sync:4.7.2")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
