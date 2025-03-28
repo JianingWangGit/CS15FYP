@@ -1,5 +1,6 @@
 package com.example.cs_15_fyp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,5 +50,12 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         ReviewAdapter adapter = new ReviewAdapter(reviews);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reviewRecyclerView.setAdapter(adapter);
+
+
+        findViewById(R.id.btnGoToGiveReview).setOnClickListener(v -> {
+            Intent intent = new Intent(InfoRestaurantActivity.this, GiveReviewActivity.class);
+            startActivity(intent);
+        });
     }
+
 }
