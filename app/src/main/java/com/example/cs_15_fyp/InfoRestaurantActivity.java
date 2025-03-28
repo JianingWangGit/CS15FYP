@@ -2,9 +2,8 @@ package com.example.cs_15_fyp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,15 +30,21 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Connect to views
+        // Views Creation
+        Button btnGoToGiveReview = findViewById(R.id.btnGoToGiveReview);
         EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
 
-        // Set dummy restaurant info
-        restaurantName.setText("Delicious Dumplings");
 
-        // Dummy review data
+        btnGoToGiveReview.setOnClickListener(v -> {
+            Intent intent = new Intent(InfoRestaurantActivity.this, GiveReviewActivity.class);
+            startActivity(intent);
+        });
+
+
+        //  Dummy review data
+        restaurantName.setText("Delicious Dumplings");
         List<Review> reviews = new ArrayList<>();
         reviews.add(new Review("user111", "The dumplings were 🔥", 5));
         reviews.add(new Review("user112", "Soup was mid. Service was nice.", 3.5f));
@@ -50,12 +55,6 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         ReviewAdapter adapter = new ReviewAdapter(reviews);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reviewRecyclerView.setAdapter(adapter);
-
-
-        findViewById(R.id.btnGoToGiveReview).setOnClickListener(v -> {
-            Intent intent = new Intent(InfoRestaurantActivity.this, GiveReviewActivity.class);
-            startActivity(intent);
-        });
     }
 
 }

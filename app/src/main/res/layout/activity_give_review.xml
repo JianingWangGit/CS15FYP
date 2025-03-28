@@ -25,56 +25,63 @@
         <!-- Text box (larger for multiple lines) -->
         <EditText
             android:id="@+id/editTextReview"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_width="365dp"
+            android:layout_height="117dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_border"
+            android:gravity="top"
             android:hint="Describe your experience..."
             android:inputType="textMultiLine"
-            android:gravity="top"
-            android:background="@drawable/edittext_border"
-            android:padding="10dp"
-            android:layout_marginTop="8dp"/>
+            android:padding="10dp" />
 
-        <!-- Rating label -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Rating (1 - very bad, 5 - excellent)"
-            android:textSize="16sp"
             android:textColor="#000000"
-            android:layout_marginTop="20dp" />
+            android:textSize="16sp" />
 
-        <!-- Rating Bar -->
 
-        <!-- Upload button -->
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:numStars="5"
-            android:stepSize="1.0" />
+            android:stepSize="0.5" />
+
+        <TextView
+            android:id="@+id/ratingDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Your rating: 0 ⭐"
+            android:textColor="#000000"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnUploadPhotos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Photos"
+            android:layout_marginTop="15dp"
             android:backgroundTint="#DDDDDD"
-            android:textColor="#000000"
-            android:layout_marginTop="20dp" />
+            android:text="Upload Photos"
+            android:textColor="#000000" />
 
-        <!-- Photo upload container -->
         <FrameLayout
             android:id="@+id/photoFrame"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="#E0E0E0"
+            android:layout_width="335dp"
+            android:layout_height="230dp"
             android:layout_marginTop="16dp"
+            android:background="#E0E0E0"
             android:padding="8dp">
 
             <!-- Horizontal scroll for images -->
+
+            <!-- Photo count (top-right corner) -->
             <HorizontalScrollView
-                android:layout_width="match_parent"
+                android:layout_width="351dp"
                 android:layout_height="match_parent"
                 android:scrollbars="none">
 
@@ -82,33 +89,31 @@
                     android:id="@+id/photoContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
             </HorizontalScrollView>
 
-            <!-- Photo count (top-right corner) -->
             <TextView
                 android:id="@+id/photoCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 photos"
-                android:textColor="#000000"
+                android:layout_gravity="top|end"
                 android:background="#CCCCCC"
                 android:padding="4dp"
-                android:textSize="12sp"
-                android:layout_gravity="top|end" />
+                android:text="0 photos"
+                android:textColor="#000000"
+                android:textSize="12sp" />
 
             <!-- Page indicators (dots) -->
             <LinearLayout
                 android:id="@+id/pageDots"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal" />
         </FrameLayout>
 
-        <!-- Optional Submit Button -->
         <Button
             android:id="@+id/btnSubmitReview"
             android:layout_width="match_parent"

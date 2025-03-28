@@ -1,6 +1,8 @@
 package com.example.cs_15_fyp;
 
 import android.os.Bundle;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +22,15 @@ public class GiveReviewActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        // Connect views
+        RatingBar ratingBar = findViewById(R.id.ratingBar);
+        TextView ratingDisplay = findViewById(R.id.ratingDisplay);
+
+        // Show current rating when changed
+        ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
+            ratingDisplay.setText("Your rating: " + rating + " ⭐");
         });
     }
 }

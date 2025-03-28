@@ -14,11 +14,9 @@
         android:padding="20dp">
 
         <!-- Search Bar -->
-
-        <!-- Restaurant Image -->
         <EditText
             android:id="@+id/searchBar"
-            android:layout_width="383dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:background="@drawable/edittext_border"
@@ -30,16 +28,17 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="8dp" />
 
+        <!-- Restaurant Image -->
         <ImageView
             android:id="@+id/restaurantImage"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="180dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/rounded_image_background"
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery" />
 
-        <!-- Name + Rating (Text + ⭐) -->
+        <!-- Name + Rating -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +47,6 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="16dp">
 
-            <!-- Restaurant Name -->
             <TextView
                 android:id="@+id/restaurantName"
                 android:layout_width="0dp"
@@ -56,10 +54,9 @@
                 android:layout_weight="1"
                 android:text="Restaurant Name"
                 android:textColor="#000000"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <!-- Rating Number + Star Icon -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,14 +69,14 @@
                     android:layout_height="wrap_content"
                     android:text="4.5"
                     android:textColor="#000000"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="6dp"
                     android:src="@android:drawable/btn_star_big_on"
-                    android:layout_marginStart="4dp"
                     app:tint="#00BCD4" />
             </LinearLayout>
         </LinearLayout>
@@ -100,7 +97,7 @@
             android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
-        <!-- User Reviews Section -->
+        <!-- Refine Filters -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +108,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Example: Food Filter -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,31 +130,40 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Repeat more filters here -->
+                <!-- Add more filters if needed -->
             </LinearLayout>
         </HorizontalScrollView>
 
-        <TextView
+        <!-- User Reviews title + Write Review button in one row -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="16dp"
-            android:text="User Reviews"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
-        <Button
-            android:id="@+id/btnGoToGiveReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Write a Review"
-            android:backgroundTint="#2196F3"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="User Reviews"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
 
-        <!-- RecyclerView -->
+            <Button
+                android:id="@+id/btnGoToGiveReview"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Write a Review"
+                android:textSize="14sp"
+                android:backgroundTint="#2196F3"
+                android:textColor="#FFFFFF"
+                android:paddingHorizontal="12dp"
+                android:elevation="2dp" />
+        </LinearLayout>
+
+        <!-- Review List -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reviewRecyclerView"
             android:layout_width="match_parent"
