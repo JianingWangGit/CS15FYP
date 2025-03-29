@@ -1,22 +1,10 @@
-console.log("Backend server is running");
-// const express = require('express');
-// const cors = require('cors');
+/**
+ * Starts the server (calls app.js)
+ */
+const app = require('./app');
 
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
+const PORT = process.env.PORT;
 
-// let reviews = [];
-
-// app.get('/reviews', (req, res) => {
-//     res.json(reviews);
-// });
-
-// app.post('/addReview', (req, res) => {
-//     reviews.push(req.body);
-//     res.json({ success: true });
-// });
-
-// app.listen(3000, () => {
-//     console.log('Backend running on http://localhost:3000');
-// });
+app.listen(PORT, () => {
+    console.log(`Backend server is running on port ${PORT}`);
+});
