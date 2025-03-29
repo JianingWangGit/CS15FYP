@@ -16,5 +16,8 @@
 .externalNativeBuild
 .cxx
 
+# Ignore backend dependencies
+nodeBackEnd/node_modules/
+
 *.log
 local.properties
