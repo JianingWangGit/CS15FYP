@@ -32,5 +32,11 @@ public class GiveReviewActivity extends AppCompatActivity {
         ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
             ratingDisplay.setText("Your rating: " + rating + " ⭐");
         });
+
+
+
+
+
+
     }
 }
