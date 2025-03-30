@@ -1,5 +1,5 @@
 /**
- * Main Express app setup
+ * app.js - Main Express app setup
  */
 const express = require('express');
 const cors = require('cors');
@@ -17,5 +17,8 @@ connectDB(process.env.MONGO_URI);
 app.get('/', (req, res) => {
     res.send('API is running...');
 });
+
+const reviewRoutes = require('./routers/review_routes');
+app.use('/reviews', reviewRoutes);
 
 module.exports = app;
