@@ -3,8 +3,8 @@
 This project contains two parts:
 
 - `app/`: Android frontend built with Android Studio (Java + XML)
-- `nodeBackEnd/`: Node.js backend using Express + MongoDB Atlas (hosted on Google Cloud server in future)
-
+- `nodeBackEnd/`: Node.js backend using Express + MongoDB Atlas 
+    via RESTful backend API (hosted on Google Cloud server in future)
 ---
 
 ## 📁 Project Structure

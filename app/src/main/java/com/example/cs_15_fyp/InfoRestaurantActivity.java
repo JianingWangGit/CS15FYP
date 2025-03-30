@@ -52,9 +52,9 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         reviews.add(new Review("user114", "Great ambiance, loved the vibe 🎶", 4));
 
         // Set up RecyclerView
-        ReviewAdapter adapter = new ReviewAdapter(reviews);
-        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reviewRecyclerView.setAdapter(adapter);
+//        ReviewAdapter adapter = new ReviewAdapter(reviews);
+//        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        reviewRecyclerView.setAdapter(adapter);
     }
 
 }

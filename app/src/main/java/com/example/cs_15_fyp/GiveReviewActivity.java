@@ -33,10 +33,5 @@ public class GiveReviewActivity extends AppCompatActivity {
             ratingDisplay.setText("Your rating: " + rating + " ⭐");
         });
 
-
-
-
-
-
     }
 }
