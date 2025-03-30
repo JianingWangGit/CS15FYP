@@ -74,9 +74,17 @@ public class GiveReviewActivity extends AppCompatActivity {
                     editTextReview.setText("");
                     ratingBar.setRating(0f);
                 } else {
-                    Toast.makeText(GiveReviewActivity.this, "Submission failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GiveReviewActivity.this, "Submission failed: " + response.code(), Toast.LENGTH_SHORT).show();
+
+                    try {
+                        String errorBody = response.errorBody().string();
+                        System.out.println("Error body: " + errorBody);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
+
 
             @Override
             public void onFailure(Call<Review> call, Throwable t) {
