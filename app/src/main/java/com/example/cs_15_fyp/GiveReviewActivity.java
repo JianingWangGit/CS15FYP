@@ -130,8 +130,15 @@ public class GiveReviewActivity extends AppCompatActivity {
             public void onResponse(Call<Review> call, Response<Review> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(GiveReviewActivity.this, "Review submitted!", Toast.LENGTH_SHORT).show();
+                    // Optionally reset form if needed
                     editTextReview.setText("");
                     ratingBar.setRating(0f);
+
+                    // Navigate back to InfoRestaurantActivity
+                    Intent intent = new Intent(GiveReviewActivity.this, InfoRestaurantActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
+                    finish(); // closes GiveReviewActivity
                 } else {
                     Toast.makeText(GiveReviewActivity.this, "Submission failed: " + response.code(), Toast.LENGTH_SHORT).show();
                     try {
