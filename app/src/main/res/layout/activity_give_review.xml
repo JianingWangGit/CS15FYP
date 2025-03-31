@@ -13,7 +13,7 @@
         android:padding="24dp"
         android:gravity="center_horizontal">
 
-        <!-- Text box label -->
+        <!-- Review title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:textStyle="bold"
             android:textColor="#000000" />
 
-        <!-- Text box (larger for multiple lines) -->
+        <!-- Review input -->
         <EditText
             android:id="@+id/editTextReview"
             android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:inputType="textMultiLine"
             android:padding="10dp" />
 
-        <!-- Rating section -->
+        <!-- Rating -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -70,33 +70,32 @@
             android:text="Upload Photos"
             android:textColor="#000000" />
 
-        <!-- Photo display area -->
+        <!-- Photo count label (just above photo frame, no marginBottom) -->
+        <TextView
+            android:id="@+id/photoCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="end"
+            android:background="#CCCCCC"
+            android:padding="4dp"
+            android:text="0 photos"
+            android:textColor="#000000"
+            android:textSize="12sp" />
+
+        <!-- Photo frame -->
         <FrameLayout
             android:id="@+id/photoFrame"
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:layout_marginTop="16dp"
-            android:background="#E0E0E0"
-            android:padding="8dp">
+            android:background="#F5F5F5"
+            android:padding="4dp">
 
-            <!-- ViewPager2 for swiping images -->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPagerPhotos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal" />
-
-            <!-- Photo count overlay -->
-            <TextView
-                android:id="@+id/photoCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|end"
-                android:background="#CCCCCC"
-                android:padding="4dp"
-                android:text="0 photos"
-                android:textColor="#000000"
-                android:textSize="12sp" />
         </FrameLayout>
 
         <!-- Submit button -->

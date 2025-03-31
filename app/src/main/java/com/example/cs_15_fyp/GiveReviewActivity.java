@@ -75,7 +75,9 @@ public class GiveReviewActivity extends AppCompatActivity {
         // Upload button
         btnUploadPhotos.setOnClickListener(v -> openImagePicker());
 
-        imagePagerAdapter = new ImagePagerAdapter(this, imageUris);
+        imagePagerAdapter = new ImagePagerAdapter(this, imageUris, () -> {
+            photoCount.setText(imageUris.size() + " photos");
+        });
         viewPagerPhotos.setAdapter(imagePagerAdapter);
 
         // Modern activity result launcher

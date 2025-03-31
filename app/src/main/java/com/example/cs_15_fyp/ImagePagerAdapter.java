@@ -14,12 +14,14 @@ import java.util.List;
 
 public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.ViewHolder> {
 
-    private List<Uri> imageUris;
     private Context context;
+    private List<Uri> imageUris;
+    private Runnable onDataChanged;
 
-    public ImagePagerAdapter(Context context, List<Uri> imageUris) {
+    public ImagePagerAdapter(Context context, List<Uri> imageUris, Runnable onDataChanged) {
         this.context = context;
         this.imageUris = imageUris;
+        this.onDataChanged = onDataChanged;
     }
 
     @NonNull
@@ -31,7 +33,15 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageURI(imageUris.get(position));
+        Uri uri = imageUris.get(position);
+        holder.imageView.setImageURI(uri);
+
+        holder.btnDelete.setOnClickListener(v -> {
+            imageUris.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, imageUris.size());
+            onDataChanged.run(); // Notify GiveReviewActivity to update photo count
+        });
     }
 
     @Override
@@ -39,11 +49,14 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
         return imageUris.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        public ViewHolder(View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView, btnDelete;
+
+        ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }
+
