@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
         if (!rating) {
             return res.status(400).json({ success: false, error: "Rating is required" });
         }
-        const newReview = new Review({ username, comment, rating });
+        const newReview = new Review({ username, comment, rating, photos });
         await newReview.save();
 
         res.status(201).json({ success: true, review: newReview });
