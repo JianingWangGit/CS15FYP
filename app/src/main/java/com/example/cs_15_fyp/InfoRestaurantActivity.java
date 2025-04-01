@@ -45,11 +45,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
 
         //  Dummy review data
         restaurantName.setText("Delicious Dumplings");
-        List<Review> reviews = new ArrayList<>();
-        reviews.add(new Review("user111", "The dumplings were 🔥", 5));
-        reviews.add(new Review("user112", "Soup was mid. Service was nice.", 3.5f));
-        reviews.add(new Review("user113", "Coffee was straight garbage 💀", 1));
-        reviews.add(new Review("user114", "Great ambiance, loved the vibe 🎶", 4));
+
 
         // Set up RecyclerView
 //        ReviewAdapter adapter = new ReviewAdapter(reviews);

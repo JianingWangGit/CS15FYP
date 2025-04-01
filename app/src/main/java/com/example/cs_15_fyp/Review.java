@@ -1,13 +1,19 @@
 package com.example.cs_15_fyp;
+
+import java.util.List;
+
 public class Review {
     private String username;
     private String comment;
     private float rating;
 
-    public Review(String username, String comment, float rating) {
+    private List<String> photos;
+
+    public Review(String username, String comment, float rating, List<String> photos) {
         this.username = username;
         this.comment = comment;
         this.rating = rating;
+        this.photos = photos;
     }
 
     public String getUsername() {
@@ -20,6 +26,10 @@ public class Review {
 
     public float getRating() {
         return rating;
+    }
+
+    public List<String> getPhotos() {
+        return photos;
     }
 }
 

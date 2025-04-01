@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.List;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,13 +25,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import android.util.Base64;
+import java.io.InputStream;
+
+
 public class GiveReviewActivity extends AppCompatActivity {
 
     private RatingBar ratingBar;
     private TextView ratingDisplay;
     private EditText editTextReview;
     private Button btnSubmitReview;
-
     private ReviewApi reviewApi;
 
     private ArrayList<Uri> imageUris = new ArrayList<>();
@@ -114,39 +118,57 @@ public class GiveReviewActivity extends AppCompatActivity {
         imagePickerLauncher.launch(Intent.createChooser(intent, "Select Pictures"));
     }
 
+    private String convertImageUriToBase64(Uri uri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            inputStream.close();
+            return Base64.encodeToString(bytes, Base64.NO_WRAP); // NO_WRAP is cleaner
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private void submitReview() {
         String comment = editTextReview.getText().toString().trim();
         float rating = ratingBar.getRating();
 
-        if (comment.isEmpty() || rating == 0.0f) {
-            Toast.makeText(this, "Please enter a comment and select a rating", Toast.LENGTH_SHORT).show();
+        if (rating == 0.0f) {
+            Toast.makeText(this, "Please select a rating", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Review review = new Review("user123", comment, rating);
+        // Convert photos to Base64
+        List<String> base64Photos = new ArrayList<>();
+        for (Uri uri : imageUris) {
+            String base64 = convertImageUriToBase64(uri);
+            if (base64 != null) {
+                base64Photos.add(base64);
+            }
+        }
+
+        // Submit with Base64 photos
+        Review review = new Review("user123", comment, rating, base64Photos);
 
         reviewApi.submitReview(review).enqueue(new Callback<Review>() {
             @Override
             public void onResponse(Call<Review> call, Response<Review> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(GiveReviewActivity.this, "Review submitted!", Toast.LENGTH_SHORT).show();
-                    // Optionally reset form if needed
                     editTextReview.setText("");
                     ratingBar.setRating(0f);
+                    imageUris.clear();
+                    imagePagerAdapter.notifyDataSetChanged();
+                    photoCount.setText("0 photos");
 
-                    // Navigate back to InfoRestaurantActivity
                     Intent intent = new Intent(GiveReviewActivity.this, InfoRestaurantActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
-                    finish(); // closes GiveReviewActivity
+                    finish();
                 } else {
                     Toast.makeText(GiveReviewActivity.this, "Submission failed: " + response.code(), Toast.LENGTH_SHORT).show();
-                    try {
-                        String errorBody = response.errorBody().string();
-                        System.out.println("Error body: " + errorBody);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
 

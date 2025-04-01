@@ -1,11 +1,15 @@
 # CS15-FYP Full-Stack Review Platform
 
-This project contains two parts:
+This project is an Android-based food review platform for Monash University students and staff. 
+It supports posting reviews with star ratings, text, and optional images. Business owners can respond to each review.
 
-- `app/`: Android frontend built with Android Studio (Java + XML)
-- `nodeBackEnd/`: Node.js backend using Express + MongoDB Atlas 
-    via RESTful backend API (hosted on Google Cloud server in future)
----
+## 🔌 Technologies Used
+
+- **Frontend**: Android Studio (Java + XML)
+- **Backend**: Node.js + Express
+- **Database**: MongoDB Atlas
+- **Image Storage**: Firebase Storage
+- **Communication**: RESTful API (future: hosted on Google Cloud)
 
 ## 📁 Project Structure
 
