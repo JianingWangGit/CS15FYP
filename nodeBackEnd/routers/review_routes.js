@@ -16,9 +16,13 @@ router.get('/', async (req, res) => {
 // POST a new review
 router.post('/', async (req, res) => {
     try {
-        const { username, comment, rating } = req.body;
+        const { username, comment, rating, photos } = req.body;
+        if (!rating) {
+            return res.status(400).json({ success: false, error: "Rating is required" });
+        }
         const newReview = new Review({ username, comment, rating });
         await newReview.save();
+
         res.status(201).json({ success: true, review: newReview });
     } catch (error) {
         console.log(error);
