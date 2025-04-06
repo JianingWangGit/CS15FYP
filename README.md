@@ -25,8 +25,10 @@ CS-15-FYP/
 │
 ├── nodeBackEnd/              # Node.js backend API
 │   ├── config/               # MongoDB connection setup
-│   ├── models/               # (Optional) Mongoose schemas
-│   ├── routes/               # (Optional) Route handlers
+│      └── monngdb.js
+│   ├── models/               # Mongoose schemas (e.g. Review)
+│     ├── review.js           # Review schema
+│   ├── routes/               # Route handlers (e.g. reviewRoutes.js)
 │   ├── app.js                # Express app logic (middleware, routes)
 │   ├── server.js             # Entry point to start the server
 │   ├── .env                  # Environment variables (MongoDB URI, PORT)
