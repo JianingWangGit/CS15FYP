@@ -13,28 +13,14 @@
         android:theme="@style/Theme.CS15FYP"
         tools:targetApi="31">
         <activity
-            android:name=".InfoRestaurantActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity-->
-<!--            android:name=".InfoRestaurantActivity"-->
-<!--            android:exported="false" />-->
-        <activity
-            android:name=".GiveReviewActivity"
-            android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:exported="true"> &lt;!&ndash; Needs to be true if you add intent-filter &ndash;&gt;-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; This is the main entry point of the app &ndash;&gt;-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-        <activity android:name=".MainActivity" android:exported="false" />
+
     </application>
 
 </manifest>

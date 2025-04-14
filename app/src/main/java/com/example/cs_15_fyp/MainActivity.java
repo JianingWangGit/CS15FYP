@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_main);
+        setContentView(binding.getRoot());
         replaceFragment(new SearchFragment());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+        if (savedInstanceState == null) {
+            replaceFragment(new SearchFragment()); // ← change this to your default fragment
+            binding.bottomNavigationView.setSelectedItemId(R.id.search); // ← this highlights the correct tab
+        }
     }
 
     private void replaceFragment(Fragment fragment) {
