@@ -5,11 +5,13 @@ It supports posting reviews with star ratings, text, and optional images. Busine
 
 ## 🔌 Technologies Used
 
-- **Frontend**: Android Studio (Java + XML)
+- **Frontend**: Android Studio (Java + XML) +  Firebase Storage
 - **Backend**: Node.js + Express
 - **Database**: MongoDB Atlas
 - **Image Storage**: Firebase Storage
 - **Communication**: RESTful API (future: hosted on Google Cloud)
+
+Firebase **Storage** to upload and host review images. This prevents oversized payload issues with MongoDB.
 
 ## 📁 Project Structure
 
