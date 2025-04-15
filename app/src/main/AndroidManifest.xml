@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,7 +14,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CS15FYP"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".AllReviewsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InfoRestaurantActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- <activity -->
+        <!-- android:name=".InfoRestaurantActivity" -->
+        <!-- android:exported="false" /> -->
+        <activity
+            android:name=".GiveReviewActivity"
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".MainActivity" -->
+        <!-- android:exported="true"> &lt;!&ndash; Needs to be true if you add intent-filter &ndash;&gt; -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> &lt;!&ndash; This is the main entry point of the app &ndash;&gt; -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />

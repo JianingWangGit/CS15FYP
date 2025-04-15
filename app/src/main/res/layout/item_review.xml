@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:elevation="2dp"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/reviewUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <!-- Smaller RatingBar -->
+        <RatingBar
+            android:id="@+id/reviewRatingBar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:scaleX="1"
+            android:scaleY="1" />
+
+        <!-- Comment -->
+        <TextView
+            android:id="@+id/reviewComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Review content here"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Photo Count -->
+        <TextView
+            android:id="@+id/reviewPhotoCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 photos"
+            android:textSize="12sp"
+            android:textColor="#666" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
