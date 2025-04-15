@@ -19,6 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
+            android:src="@drawable/ic_no_image"
+            android:background="#F5F5F5"
             android:contentDescription="Restaurant image"/>
 
         <TextView
