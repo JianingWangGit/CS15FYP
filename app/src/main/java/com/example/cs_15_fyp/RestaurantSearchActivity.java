@@ -3,6 +3,7 @@ package com.example.cs_15_fyp;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -12,14 +13,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs_15_fyp.adapter.RestaurantAdapter;
 import com.example.cs_15_fyp.model.Restaurant;
+import com.example.cs_15_fyp.network.ApiResponse;
+import com.example.cs_15_fyp.network.NetworkClient;
+import com.example.cs_15_fyp.network.RestaurantService;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RestaurantSearchActivity extends AppCompatActivity implements RestaurantAdapter.OnRestaurantClickListener {
     private RestaurantAdapter adapter;
@@ -29,6 +38,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
     private ChipGroup cuisineChipGroup;
     private final Set<String> selectedCuisines = new HashSet<>();
     private final Set<Double> selectedPriceRanges = new HashSet<>();
+    private RestaurantService restaurantService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
         // Initialize data structures
         allRestaurants = new ArrayList<>();
         adapter = new RestaurantAdapter(this);
+        restaurantService = NetworkClient.getRestaurantService();
 
         // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -75,7 +86,11 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
 
             @Override
             public void afterTextChanged(Editable s) {
-                filterRestaurants();
+                if (s.length() > 2) {
+                    searchRestaurants(s.toString());
+                } else if (s.length() == 0) {
+                    loadRestaurants();
+                }
             }
         });
     }
@@ -85,7 +100,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
         for (int i = 0; i < priceFilterChipGroup.getChildCount(); i++) {
             final int priceIndex = i;
             Chip chip = (Chip) priceFilterChipGroup.getChildAt(i);
-            chip.setCheckable(true); // Make chips checkable
+            chip.setCheckable(true);
             chip.setOnClickListener(v -> {
                 if (chip.isChecked()) {
                     selectedPriceRanges.add((double) (priceIndex + 1));
@@ -99,7 +114,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
         // Cuisine filter chips
         for (int i = 0; i < cuisineChipGroup.getChildCount(); i++) {
             final Chip cuisineChip = (Chip) cuisineChipGroup.getChildAt(i);
-            cuisineChip.setCheckable(true); // Make chips checkable
+            cuisineChip.setCheckable(true);
             cuisineChip.setOnClickListener(v -> {
                 if (cuisineChip.isChecked()) {
                     selectedCuisines.add(cuisineChip.getText().toString());
@@ -112,38 +127,69 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
     }
 
     private void loadRestaurants() {
-        // TODO: Replace with actual data loading from your backend
-        // This is just sample data
-        allRestaurants.add(new Restaurant("1", "Pizza Place", "Best pizza in town", "Italian",
-                4.5, "123 Main St", "https://example.com/pizza.jpg", true, 2));
-        allRestaurants.add(new Restaurant("2", "Sushi Bar", "Fresh sushi daily", "Japanese",
-                4.8, "456 Oak Ave", "https://example.com/sushi.jpg", true, 3));
-        allRestaurants.add(new Restaurant("3", "Taco Fiesta", "Authentic Mexican", "Mexican",
-                4.2, "789 Pine Rd", "https://example.com/tacos.jpg", false, 1));
-        allRestaurants.add(new Restaurant("4", "Curry House", "Spicy Indian cuisine", "Indian",
-                4.6, "321 Maple Dr", "https://example.com/curry.jpg", true, 2));
+        Log.d("RestaurantSearch", "Attempting to load restaurants");
+        Call<ApiResponse<List<Restaurant>>> call = restaurantService.getAllRestaurants();
+        
+        call.enqueue(new Callback<ApiResponse<List<Restaurant>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Restaurant>>> call, Response<ApiResponse<List<Restaurant>>> response) {
+                Log.d("RestaurantSearch", "Response received. Code: " + response.code());
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Restaurant> restaurants = response.body().getData();
+                    Log.d("RestaurantSearch", "Successfully loaded " + restaurants.size() + " restaurants");
+                    allRestaurants = restaurants;
+                    filterRestaurants();
+                } else {
+                    Log.e("RestaurantSearch", "Failed to load restaurants. Response code: " + response.code());
+                    if (response.errorBody() != null) {
+                        try {
+                            Log.e("RestaurantSearch", "Error body: " + response.errorBody().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Toast.makeText(RestaurantSearchActivity.this, "Failed to load restaurants", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        filterRestaurants();
+            @Override
+            public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
+                Log.e("RestaurantSearch", "Network error: " + t.getMessage(), t);
+                Toast.makeText(RestaurantSearchActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void searchRestaurants(String query) {
+        restaurantService.searchRestaurants(query).enqueue(new Callback<ApiResponse<List<Restaurant>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Restaurant>>> call, Response<ApiResponse<List<Restaurant>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    allRestaurants = response.body().getData();
+                    filterRestaurants();
+                } else {
+                    Toast.makeText(RestaurantSearchActivity.this, "Search failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
+                Toast.makeText(RestaurantSearchActivity.this, "Search failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void filterRestaurants() {
-        String searchQuery = searchInput.getText().toString().toLowerCase();
-        List<Restaurant> filteredList = new ArrayList<>();
+        List<Restaurant> filteredList = new ArrayList<>(allRestaurants);
 
-        for (Restaurant restaurant : allRestaurants) {
-            boolean matchesSearch = restaurant.getName().toLowerCase().contains(searchQuery) ||
-                    restaurant.getDescription().toLowerCase().contains(searchQuery) ||
-                    restaurant.getCuisine().toLowerCase().contains(searchQuery);
+        // Apply price range filter
+        if (!selectedPriceRanges.isEmpty()) {
+            filteredList.removeIf(restaurant -> !selectedPriceRanges.contains(restaurant.getPriceRange()));
+        }
 
-            boolean matchesPrice = selectedPriceRanges.isEmpty() ||
-                    selectedPriceRanges.contains(restaurant.getPriceRange());
-
-            boolean matchesCuisine = selectedCuisines.isEmpty() ||
-                    selectedCuisines.contains(restaurant.getCuisine());
-
-            if (matchesSearch && matchesPrice && matchesCuisine) {
-                filteredList.add(restaurant);
-            }
+        // Apply cuisine filter
+        if (!selectedCuisines.isEmpty()) {
+            filteredList.removeIf(restaurant -> !selectedCuisines.contains(restaurant.getCuisine()));
         }
 
         adapter.filterRestaurants(filteredList);
@@ -151,7 +197,6 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
 
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
-        // TODO: Handle restaurant click - navigate to detail view
         Toast.makeText(this, "Clicked: " + restaurant.getName(), Toast.LENGTH_SHORT).show();
     }
 
