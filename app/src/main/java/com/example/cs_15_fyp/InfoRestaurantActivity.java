@@ -24,6 +24,7 @@ import java.util.List;
 
 import retrofit2.Retrofit;
 
+
 public class InfoRestaurantActivity extends AppCompatActivity {
 
     private ReviewAdapter adapter;
