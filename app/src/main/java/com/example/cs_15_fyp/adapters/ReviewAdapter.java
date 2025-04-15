@@ -1,14 +1,16 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.models.Review;
 
 import java.util.List;
 

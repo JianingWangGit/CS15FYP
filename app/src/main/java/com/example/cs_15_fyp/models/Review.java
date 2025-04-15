@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.models;
 
 import java.util.List;
 

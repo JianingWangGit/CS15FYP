@@ -17,25 +17,55 @@ Firebase **Storage** to upload and host review images. This prevents oversized p
 
 ```plaintext
 CS-15-FYP/
-├── app/                      # Android frontend (Java + XML)
-│   └── src/
-│       └── main/
-│           ├── java/com/example/cs_15_fyp/  # Java activity & adapter classes
-│           └── res/
-│               ├── layout/                  # XML layouts
-│               └── drawable/                # Images, icons, backgrounds
-│
-├── nodeBackEnd/              # Node.js backend API
-│   ├── config/               # MongoDB connection setup
-│      └── monngdb.js
-│   ├── models/               # Mongoose schemas (e.g. Review)
-│     ├── review.js           # Review schema
-│   ├── routes/               # Route handlers (e.g. reviewRoutes.js)
-│   ├── app.js                # Express app logic (middleware, routes)
-│   ├── server.js             # Entry point to start the server
-│   ├── .env                  # Environment variables (MongoDB URI, PORT)
-│   ├── .gitignore            # Ignore node_modules, .env, etc.
-│   └── package.json          # Node.js dependencies
+    ├── app/                      # Android frontend (Java + XML)
+    │   └── src/
+    │       └── main/
+    │           ├── java/com/example/cs_15_fyp/  # Java activity & adapter classes
+    │               ├── InfoRestaurantActivity.java
+    │               ├── GiveReviewActivity.java
+    │               ├── AllReviewsActivity.java
+    │               ├── ReviewDetailActivity.java
+    │               ├── adapters/               # RecyclerView adapters
+    │                   ├── ReviewAdapter.java
+    │               ├── models/                 # Data models
+    │                   ├── Review.java
+    │               ├── api/                    # Retrofit API interfaces
+    │                   ├── ApiClient.java
+    │                   ├── ReviewApi.java
+    │
+    │           └── res/
+    │               ├── layout/                 # XML layouts
+    │                   ├── activity_info_restaurant.xml
+    │                   ├── activity_give_review.xml
+    │                   ├── activity_all_reviews.xml
+    │                   ├── item_review.xml     # Layout for individual review items
+    │
+    │               └── drawable/               # Images, icons, backgrounds
+    │                   ├── ic_launcher.png     # App launcher icon
+    │                   ├── background_main.xml # XML drawable for main screen background
+    │                   ├── btn_rounded.xml     # XML drawable for rounded buttons
+    │                   ├── star_filled.png     # Icon for filled star (used in ratings)
+    │                   ├── star_empty.png      # Icon for empty star (used in ratings)
+    │                   ├── placeholder.png     # Placeholder image for reviews without images
+    │
+    ├── nodeBackEnd/              # Node.js backend API
+    │   ├── config/               # MongoDB connection setup
+    │       └── mongodb.js
+    │   ├── models/               # Mongoose schemas (e.g., Review)
+    │       ├── review.js         # Review schema
+    │   ├── routes/               # Route handlers (e.g., reviewRoutes.js)
+    │       ├── reviewRoutes.js
+    │   ├── app.js                # Express app logic (middleware, routes)
+    │   ├── server.js             # Entry point to start the server
+    │   ├── .env                  # Environment variables (MongoDB URI, PORT)
+    │   ├── .gitignore            # Ignore node_modules, .env, etc.
+    │   ├── package.json          # Node.js dependencies
+    │   └── package-lock.json     # Node.js dependency lock file
+    |   ├── gradle.properties       # Gradle properties for Android project
+    |   ├── build.gradle            # Gradle build file for Android project
+    |   ├── settings.gradle         # Gradle settings file for Android project
+    └── README.md                # Project documentation
+```
 
 ---
 

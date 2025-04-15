@@ -1,4 +1,6 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.api;
+
+import com.example.cs_15_fyp.models.Review;
 
 import java.util.List;
 import retrofit2.Call;

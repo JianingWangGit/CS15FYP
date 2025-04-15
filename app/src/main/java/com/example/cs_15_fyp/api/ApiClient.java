@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.api;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -9,8 +9,8 @@ public class ApiClient {
     // else if physical device (Same WIFI network for the laptop and phone):
     // run ipconfig in your laptop to get the IPv4 Address.
 //    private static final String BASE_URL = "http://10.0.2.2:2001/";
-    private static final String BASE_URL = "http://118.138.73.188:2001/";
-    //"http://192.168.59.248:2001/" "http://118.138.80.225:2001/";
+    private static final String BASE_URL = "http://118.138.110.201:2001/";
+    //"http://192.168.59.248:2001/" "http://118.138.80.225:2001/"; "http://118.138.73.188:2001/
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
