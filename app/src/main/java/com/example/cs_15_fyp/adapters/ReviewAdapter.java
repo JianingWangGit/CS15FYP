@@ -49,6 +49,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         return reviews.size();
     }
 
+    public void appendData(List<Review> newReviews) {
+        int start = reviews.size();
+        reviews.addAll(newReviews);
+        notifyItemRangeInserted(start, newReviews.size());
+    }
+
     static class ReviewViewHolder extends RecyclerView.ViewHolder {
         TextView usernameText, commentText, photoCount;
         RatingBar ratingBar;

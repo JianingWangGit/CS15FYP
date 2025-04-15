@@ -71,13 +71,12 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         Retrofit retrofit = ApiClient.getClient();
         ReviewApi reviewApi = retrofit.create(ReviewApi.class);
 
-        reviewApi.getReviews().enqueue(new retrofit2.Callback<List<Review>>() {
+        // Load only the first 2 reviews (preview)
+        reviewApi.getReviews(2, 0).enqueue(new retrofit2.Callback<List<Review>>() {
             @Override
             public void onResponse(retrofit2.Call<List<Review>> call, retrofit2.Response<List<Review>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Review> allReviews = response.body();
-                    List<Review> preview = allReviews.size() > 2 ? allReviews.subList(0, 2) : allReviews;
-                    adapter.updateData(preview);
+                    adapter.updateData(response.body());
                 }
             }
 
