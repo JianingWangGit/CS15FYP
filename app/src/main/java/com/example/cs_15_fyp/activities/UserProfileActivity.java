@@ -1,9 +1,11 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.activities;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cs_15_fyp.R;
 
 public class UserProfileActivity extends AppCompatActivity {
 
