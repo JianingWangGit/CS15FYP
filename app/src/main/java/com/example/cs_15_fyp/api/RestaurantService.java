@@ -1,6 +1,7 @@
-package com.example.cs_15_fyp.network;
+package com.example.cs_15_fyp.api;
 
-import com.example.cs_15_fyp.model.Restaurant;
+import com.example.cs_15_fyp.models.ApiResponse;
+import com.example.cs_15_fyp.models.Restaurant;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;

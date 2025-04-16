@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp.model;
+package com.example.cs_15_fyp.models;
 
 public class Restaurant {
     private String id;

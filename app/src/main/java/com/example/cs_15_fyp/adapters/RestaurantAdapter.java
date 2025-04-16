@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp.adapter;
+package com.example.cs_15_fyp.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs_15_fyp.R;
-import com.example.cs_15_fyp.model.Restaurant;
+import com.example.cs_15_fyp.models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp.network;
+package com.example.cs_15_fyp.models;
 
 public class ApiResponse<T> {
     private T data;

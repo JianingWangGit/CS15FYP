@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.cs_15_fyp.R;
 
 import java.util.List;
 

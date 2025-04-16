@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.activities;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.cs_15_fyp.adapter.RestaurantAdapter;
-import com.example.cs_15_fyp.model.Restaurant;
-import com.example.cs_15_fyp.network.ApiResponse;
-import com.example.cs_15_fyp.network.NetworkClient;
-import com.example.cs_15_fyp.network.RestaurantService;
+import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.adapters.RestaurantAdapter;
+import com.example.cs_15_fyp.api.ApiClient;
+import com.example.cs_15_fyp.models.Restaurant;
+import com.example.cs_15_fyp.models.ApiResponse;
+import com.example.cs_15_fyp.api.RestaurantService;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -60,7 +61,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
         // Initialize data structures
         allRestaurants = new ArrayList<>();
         adapter = new RestaurantAdapter(this);
-        restaurantService = NetworkClient.getRestaurantService();
+        restaurantService = ApiClient.getRestaurantApi();
 
         // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

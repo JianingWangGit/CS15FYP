@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -27,6 +27,8 @@ import retrofit2.Retrofit;
 
 import android.util.Base64;
 
+import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.adapters.ImagePagerAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Review;
