@@ -17,10 +17,10 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".AllReviewsActivity"
+            android:name=".activities.AllReviewsActivity"
             android:exported="false" />
         <activity
-            android:name=".InfoRestaurantActivity"
+            android:name=".activities.InfoRestaurantActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,7 @@
         <!-- android:name=".InfoRestaurantActivity" -->
         <!-- android:exported="false" /> -->
         <activity
-            android:name=".GiveReviewActivity"
+            android:name=".activities.GiveReviewActivity"
             android:exported="false" /> <!-- <activity -->
         <!-- android:name=".MainActivity" -->
         <!-- android:exported="true"> &lt;!&ndash; Needs to be true if you add intent-filter &ndash;&gt; -->
@@ -41,7 +41,7 @@
         <!-- </intent-filter> -->
         <!-- </activity> -->
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:exported="false" />
     </application>
 

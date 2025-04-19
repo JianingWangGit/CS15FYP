@@ -1,4 +1,4 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.activities;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.ReviewApi;
@@ -19,7 +20,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
+
 
 public class AllReviewsActivity extends AppCompatActivity {
 
@@ -61,8 +62,7 @@ public class AllReviewsActivity extends AppCompatActivity {
         isLoading = true;
         int skip = currentPage * PAGE_SIZE;
 
-        Retrofit retrofit = ApiClient.getClient();
-        ReviewApi reviewApi = retrofit.create(ReviewApi.class);
+        ReviewApi reviewApi = ApiClient.getReviewApi();
 
         reviewApi.getReviews(PAGE_SIZE, skip).enqueue(new Callback<List<Review>>() {
             @Override
