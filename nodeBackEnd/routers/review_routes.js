@@ -9,7 +9,14 @@ const Review = require('../models/review_model'); // Import the Review model
 
 // GET all reviews
 router.get('/', async (req, res) => {
-    const reviews = await Review.find().sort({ createdAt: -1 });
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = parseInt(req.query.skip) || 0;
+
+    const reviews = await Review.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+
     res.json(reviews);
 });
 
