@@ -1,5 +1,6 @@
 package com.example.cs_15_fyp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -41,6 +42,12 @@ public class AllReviewsActivity extends AppCompatActivity {
         allReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reviewAdapter = new ReviewAdapter(new ArrayList<>());
         allReviewsRecyclerView.setAdapter(reviewAdapter);
+
+        reviewAdapter.setOnItemClickListener(review -> {
+            Intent intent = new Intent(AllReviewsActivity.this, ReviewDetailActivity.class);
+            intent.putExtra("review", review);
+            startActivity(intent);
+        });
 
         // Setup infinite scroll listener
         allReviewsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

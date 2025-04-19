@@ -1,8 +1,11 @@
 package com.example.cs_15_fyp.models;
 
 import java.util.List;
+import java.io.Serializable;
 
-public class Review {
+public class Review implements Serializable {
+
+    private String id;
     private String username;
     private String comment;
     private float rating;
@@ -15,7 +18,9 @@ public class Review {
         this.rating = rating;
         this.photos = photos;
     }
-
+    public String getId() {
+        return id;
+    }
     public String getUsername() {
         return username;
     }
