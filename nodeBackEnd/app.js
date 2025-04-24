@@ -20,6 +20,9 @@ app.get('/', (req, res) => {
 });
 
 const reviewRoutes = require('./routers/review_routes');
+const restaurantRoutes = require('./routers/restaurant_routes');
+
 app.use('/reviews', reviewRoutes);
+app.use('/restaurants', restaurantRoutes);
 
 module.exports = app;
