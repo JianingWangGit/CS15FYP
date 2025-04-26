@@ -11,7 +11,13 @@ import retrofit2.http.Query;
 
 public interface ReviewApi {
     @GET("/reviews")
-    Call<List<Review>> getReviews(@Query("limit") int limit, @Query("skip") int skip);
+    Call<List<Review>> getReviewsForRestaurant(
+            @Query("restaurantId") String restaurantId,   // ✅ change to String
+            @Query("limit") int limit,
+            @Query("skip") int skip
+    );
+
+
 
     @POST("/reviews")
     Call<Review> submitReview(@Body Review review);

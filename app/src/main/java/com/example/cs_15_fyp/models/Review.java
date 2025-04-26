@@ -5,21 +5,23 @@ import java.io.Serializable;
 
 public class Review implements Serializable {
 
-    private String id;
+    private String restaurantId;
     private String username;
     private String comment;
     private float rating;
 
     private List<String> photos;
 
-    public Review(String username, String comment, float rating, List<String> photos) {
+    public Review(String restaurantId, String username, String comment, float rating, List<String> photos) {
+        this.restaurantId = restaurantId;
         this.username = username;
         this.comment = comment;
         this.rating = rating;
         this.photos = photos;
     }
-    public String getId() {
-        return id;
+
+    public String getRestaurantId() {
+        return restaurantId;
     }
     public String getUsername() {
         return username;

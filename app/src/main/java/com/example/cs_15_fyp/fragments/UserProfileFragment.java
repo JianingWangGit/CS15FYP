@@ -24,7 +24,7 @@ public class UserProfileFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_user_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         View reviewsSection = view.findViewById(R.id.reviewsSection);
         View editEmailSection = view.findViewById(R.id.editEmailSection);

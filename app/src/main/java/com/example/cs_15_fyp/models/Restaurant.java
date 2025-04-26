@@ -1,7 +1,10 @@
 package com.example.cs_15_fyp.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Restaurant {
-    private String id;
+    @SerializedName("_id")
+    private String id; // MongoDB ObjectId as String
     private String name;
     private String description;
     private String cuisine;

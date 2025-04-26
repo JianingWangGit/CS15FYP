@@ -22,7 +22,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class AllReviewsActivity extends AppCompatActivity {
 
     private RecyclerView allReviewsRecyclerView;
@@ -31,11 +30,18 @@ public class AllReviewsActivity extends AppCompatActivity {
     private static final int PAGE_SIZE = 10;  // Number of reviews to fetch at a time
     private int currentPage = 0;
     private boolean isLoading = false;
+    private String restaurantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_reviews);
+
+        // Receive restaurantId
+        Intent intent = getIntent();
+        if (intent != null) {
+            restaurantId = getIntent().getStringExtra("restaurantId");
+        }
 
         // Setup RecyclerView and Adapter
         allReviewsRecyclerView = findViewById(R.id.allReviewsRecyclerView);
@@ -44,9 +50,9 @@ public class AllReviewsActivity extends AppCompatActivity {
         allReviewsRecyclerView.setAdapter(reviewAdapter);
 
         reviewAdapter.setOnItemClickListener(review -> {
-            Intent intent = new Intent(AllReviewsActivity.this, ReviewDetailActivity.class);
-            intent.putExtra("review", review);
-            startActivity(intent);
+            Intent detailIntent = new Intent(AllReviewsActivity.this, ReviewDetailActivity.class);
+            detailIntent.putExtra("review", review);
+            startActivity(detailIntent);
         });
 
         // Setup infinite scroll listener
@@ -66,12 +72,13 @@ public class AllReviewsActivity extends AppCompatActivity {
     }
 
     private void loadAllReviews() {
+        if (restaurantId == null || restaurantId.isEmpty()) return; // Invalid
+
         isLoading = true;
         int skip = currentPage * PAGE_SIZE;
-
         ReviewApi reviewApi = ApiClient.getReviewApi();
 
-        reviewApi.getReviews(PAGE_SIZE, skip).enqueue(new Callback<List<Review>>() {
+        reviewApi.getReviewsForRestaurant(restaurantId, PAGE_SIZE, skip).enqueue(new Callback<List<Review>>() {
             @Override
             public void onResponse(Call<List<Review>> call, Response<List<Review>> response) {
                 isLoading = false;
