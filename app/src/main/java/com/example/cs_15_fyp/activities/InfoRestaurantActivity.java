@@ -47,6 +47,13 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
 
+        Intent receivedIntent = getIntent();
+        if (receivedIntent != null) {
+            String name = receivedIntent.getStringExtra("restaurantName");
+            int restaurantId = receivedIntent.getIntExtra("restaurantId", -1);
+            restaurantName.setText(name);
+        }
+
         // RecyclerView setup
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));

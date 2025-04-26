@@ -1,5 +1,6 @@
 package com.example.cs_15_fyp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.activities.InfoRestaurantActivity;
 import com.example.cs_15_fyp.adapters.RestaurantAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.RestaurantService;
@@ -188,6 +190,12 @@ public class RestaurantSearchFragment extends Fragment implements RestaurantAdap
 
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
-        Toast.makeText(getContext(), "Clicked: " + restaurant.getName(), Toast.LENGTH_SHORT).show();
+        if (getContext() != null) {
+            Intent intent = new Intent(getContext(), InfoRestaurantActivity.class);
+            intent.putExtra("restaurantName", restaurant.getName());
+            intent.putExtra("restaurantId", restaurant.getId());
+            startActivity(intent);
+        }
     }
+
 }
