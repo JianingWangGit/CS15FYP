@@ -72,6 +72,8 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             }
         }
 
+        restaurantName.setText(restaurantNameText);
+
         // See All Reviews button
         btnSeeAllReviews.setOnClickListener(v -> {
             Intent intent = new Intent(this, AllReviewsActivity.class);
