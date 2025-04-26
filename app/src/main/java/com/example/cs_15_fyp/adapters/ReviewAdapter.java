@@ -17,9 +17,18 @@ import java.util.List;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
     private List<Review> reviews;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Review review);
+    }
 
     public ReviewAdapter(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     public void updateData(List<Review> newReviews) {
@@ -42,6 +51,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.commentText.setText(review.getComment());
         holder.ratingBar.setRating(review.getRating());
         holder.photoCount.setText(review.getPhotos() != null ? review.getPhotos().size() + " photos" : "No photos");
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(review);
+            }
+        });
     }
 
     @Override

@@ -21,10 +21,16 @@ CS-15-FYP/
     │   └── src/
     │       └── main/
     │           ├── java/com/example/cs_15_fyp/  # Java activity & adapter classes
-    │               ├── InfoRestaurantActivity.java
-    │               ├── GiveReviewActivity.java
-    │               ├── AllReviewsActivity.java
-    │               ├── ReviewDetailActivity.java
+    │               ├── activities/
+    │                   ├──MainActivity
+    │                   ├──InfoRestaurantActivity
+    │                   ├──GiveReviewActivity
+    │                   ├── AllReviewsActivity
+    │               ├── fragments/
+    │                   ├──RestaurantSearchFragment
+    │                   ├──NotificationsFragment
+    │                   ├──UserProfileFragment
+    │
     │               ├── adapters/               # RecyclerView adapters
     │                   ├── ReviewAdapter.java
     │               ├── models/                 # Data models

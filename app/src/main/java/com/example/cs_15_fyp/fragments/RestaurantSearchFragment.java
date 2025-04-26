@@ -1,22 +1,26 @@
-package com.example.cs_15_fyp.activities;
+package com.example.cs_15_fyp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.activities.InfoRestaurantActivity;
 import com.example.cs_15_fyp.adapters.RestaurantAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
-import com.example.cs_15_fyp.models.Restaurant;
-import com.example.cs_15_fyp.models.ApiResponse;
 import com.example.cs_15_fyp.api.RestaurantService;
+import com.example.cs_15_fyp.models.ApiResponse;
+import com.example.cs_15_fyp.models.Restaurant;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -31,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RestaurantSearchActivity extends AppCompatActivity implements RestaurantAdapter.OnRestaurantClickListener {
+public class RestaurantSearchFragment extends Fragment implements RestaurantAdapter.OnRestaurantClickListener {
     private RestaurantAdapter adapter;
     private List<Restaurant> allRestaurants;
     private TextInputEditText searchInput;
@@ -42,21 +46,14 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
     private RestaurantService restaurantService;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant_search);
-
-        // Setup action bar
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Restaurants");
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_restaurant_search, container, false);
 
         // Initialize views
-        searchInput = findViewById(R.id.searchInput);
-        priceFilterChipGroup = findViewById(R.id.filterChipGroup);
-        cuisineChipGroup = findViewById(R.id.cuisineChipGroup);
-        RecyclerView recyclerView = findViewById(R.id.restaurantRecyclerView);
+        searchInput = view.findViewById(R.id.searchInput);
+        priceFilterChipGroup = view.findViewById(R.id.filterChipGroup);
+        cuisineChipGroup = view.findViewById(R.id.cuisineChipGroup);
+        RecyclerView recyclerView = view.findViewById(R.id.restaurantRecyclerView);
 
         // Initialize data structures
         allRestaurants = new ArrayList<>();
@@ -64,7 +61,7 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
         restaurantService = ApiClient.getRestaurantApi();
 
         // Setup RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
         // Setup search functionality
@@ -75,6 +72,8 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
 
         // Load initial data
         loadRestaurants();
+
+        return view;
     }
 
     private void setupSearch() {
@@ -128,36 +127,29 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
     }
 
     private void loadRestaurants() {
-        Log.d("RestaurantSearch", "Attempting to load restaurants");
         Call<ApiResponse<List<Restaurant>>> call = restaurantService.getAllRestaurants();
-        
+
         call.enqueue(new Callback<ApiResponse<List<Restaurant>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<Restaurant>>> call, Response<ApiResponse<List<Restaurant>>> response) {
-                Log.d("RestaurantSearch", "Response received. Code: " + response.code());
                 if (response.isSuccessful() && response.body() != null) {
                     List<Restaurant> restaurants = response.body().getData();
-                    Log.d("RestaurantSearch", "Successfully loaded " + restaurants.size() + " restaurants");
                     allRestaurants = restaurants;
                     filterRestaurants();
                 } else {
-                    Log.e("RestaurantSearch", "Failed to load restaurants. Response code: " + response.code());
-                    if (response.errorBody() != null) {
-                        try {
-                            Log.e("RestaurantSearch", "Error body: " + response.errorBody().string());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    Toast.makeText(RestaurantSearchActivity.this, "Failed to load restaurants", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to load restaurants", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
                 Log.e("RestaurantSearch", "Network error: " + t.getMessage(), t);
-                Toast.makeText(RestaurantSearchActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                // Use getActivity() instead of getContext()
+                if (getActivity() != null) {
+                    Toast.makeText(getActivity(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
     }
 
@@ -169,13 +161,13 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
                     allRestaurants = response.body().getData();
                     filterRestaurants();
                 } else {
-                    Toast.makeText(RestaurantSearchActivity.this, "Search failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Search failed", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
-                Toast.makeText(RestaurantSearchActivity.this, "Search failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Search failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -198,15 +190,12 @@ public class RestaurantSearchActivity extends AppCompatActivity implements Resta
 
     @Override
     public void onRestaurantClick(Restaurant restaurant) {
-        Toast.makeText(this, "Clicked: " + restaurant.getName(), Toast.LENGTH_SHORT).show();
+        if (getContext() != null) {
+            Intent intent = new Intent(getContext(), InfoRestaurantActivity.class);
+            intent.putExtra("restaurantName", restaurant.getName());
+            intent.putExtra("restaurantId", restaurant.getId());
+            startActivity(intent);
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-} 
+}

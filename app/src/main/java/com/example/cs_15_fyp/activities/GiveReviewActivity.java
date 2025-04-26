@@ -147,17 +147,25 @@ public class GiveReviewActivity extends AppCompatActivity {
             return;
         }
 
-        // Convert photos to Base64
-        List<String> base64Photos = new ArrayList<>();
-        for (Uri uri : imageUris) {
-            String base64 = convertImageUriToBase64(uri);
-            if (base64 != null) {
-                base64Photos.add(base64);
-            }
+        // Get restaurantId from intent
+        String restaurantId = getIntent().getStringExtra("restaurantId");
+        if (restaurantId == null || restaurantId.isEmpty()) {
+            Toast.makeText(this, "Restaurant ID is missing in Intent!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Received restaurant ID: " + restaurantId, Toast.LENGTH_LONG).show();
         }
 
-        // Submit with Base64 photos
-        Review review = new Review("user123", comment, rating, base64Photos);
+        // Convert photos
+        List<String> base64Photos = new ArrayList<>();
+//        for (Uri uri : imageUris) {
+//            String base64 = convertImageUriToBase64(uri);
+//            if (base64 != null) {
+//                base64Photos.add(base64);
+//            }
+//        }
+
+        // Submit Review with restaurantId
+        Review review = new Review(restaurantId, "user123", comment, rating, base64Photos);
 
         reviewApi.submitReview(review).enqueue(new Callback<Review>() {
             @Override
@@ -185,4 +193,5 @@ public class GiveReviewActivity extends AppCompatActivity {
             }
         });
     }
+
 }
