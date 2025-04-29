@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CS-15-FYP</string>
+    <string-array name="user_type">
+        <item> User Type </item>
+        <item> Personal </item>
+        <item> Business </item>
+    </string-array>
 </resources>
