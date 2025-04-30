@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,18 +7,21 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:padding="16dp"
-    tools:context=".MainActivity">
+    tools:context=".activities.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
+
         <ImageView
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:src="@drawable/logo4" />
+
         <EditText
+            android:id="@+id/login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -30,10 +31,10 @@
             android:textSize="12dp"
             android:background="@drawable/rounded_corner"
             android:padding="12dp"
-            android:inputType="textEmailAddress"
-            android:id="@+id/login_email"
-            />
+            android:inputType="textEmailAddress" />
+
         <EditText
+            android:id="@+id/login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
@@ -43,42 +44,45 @@
             android:textSize="12dp"
             android:background="@drawable/rounded_corner"
             android:padding="12dp"
-            android:inputType="textPassword"
-            android:id="@+id/login_password"
-            />
+            android:inputType="textPassword" />
 
         <TextView
+            android:id="@+id/forgot_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="forgot password?"
-            android:gravity="right"
-            android:id="@+id/forgot_pass"
-            />
+            android:gravity="right" />
 
         <Button
+            android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:text="Login"
             android:backgroundTint="#4CAF50"
             android:textColorHint="@color/white"
-            android:padding="8dp"
-            android:id="@+id/login_button"
-            />
+            android:padding="8dp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="---------------or---------------"
-            android:gravity="center"/>
+            android:gravity="center" />
 
         <ImageView
+            android:id="@+id/login_google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/login_google"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:src="@drawable/continuegoogle" />
 
+        <TextView
+            android:id="@+id/signup_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textColor="#000000" />
     </LinearLayout>
-
 </RelativeLayout>

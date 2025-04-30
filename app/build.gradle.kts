@@ -42,8 +42,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.gson)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     implementation(libs.firebase.auth)
     implementation(libs.credentials)
@@ -56,6 +56,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     //implementation("com.google.firebase:firebase-bom:31.5.0")
     //implementation("com.google.firebase:firebase-auth-ktx")
     //implementation("com.google.android.gms:play-services-auth:20.5.0")

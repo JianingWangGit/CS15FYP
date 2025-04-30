@@ -1,23 +1,20 @@
-package com.example.cs_15_fyp;
+package com.example.cs_15_fyp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cs_15_fyp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -113,11 +110,30 @@ public class SignUpActivity extends AppCompatActivity {
                     }*/
 
                     //account creation
+                    // === Input validation ===
                     if (user.isEmpty()) {
                         signupEmail.setError("Email cannot be empty");
+                        return;
                     }
+
                     if (pass.isEmpty()) {
                         signupPassword.setError("Password cannot be empty");
+                        return;
+                    }
+
+                    if (pass.length() < 8 || pass.length() > 12) {
+                        signupPassword.setError("Password must be 8–12 characters long");
+                        return;
+                    }
+
+                    if (!pass.matches(".*\\d.*")) {
+                        signupPassword.setError("Password must include at least one number");
+                        return;
+                    }
+
+                    if (!pass.matches(".*[^a-zA-Z0-9].*")) {
+                        signupPassword.setError("Password must include a special character (e.g. @, #, !)");
+                        return;
                     } else {
                         auth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -136,7 +152,10 @@ public class SignUpActivity extends AppCompatActivity {
                                     //startActivity(new Intent(SignUpActivity.this, RestaurantSearchActivity.class));
                                     finish();
                                 } else {
-                                    Toast.makeText(SignUpActivity.this, "Sign up Failed" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Exception e = task.getException();
+                                    Toast.makeText(SignUpActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    e.printStackTrace();  // Print full exception in Logcat
+
                                 }
                             }
                         });

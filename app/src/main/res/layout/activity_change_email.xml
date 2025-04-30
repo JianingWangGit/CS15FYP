@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    tools:context=".ChangeEmailActivity">
+    tools:context=".activities.ChangeEmailActivity">
 
     <TextView
         android:id="@+id/changepass"
