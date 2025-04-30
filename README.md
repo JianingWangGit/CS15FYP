@@ -1,7 +1,9 @@
 # CS15-FYP Full-Stack Review Platform
 
+Final Year Project for FIT3162 units at Monash University, Australia.
 This project is an Android-based food review platform for Monash University students and staff. 
 It supports posting reviews with star ratings, text, and optional images. Business owners can respond to each review.
+
 
 ## 🔌 Technologies Used
 
