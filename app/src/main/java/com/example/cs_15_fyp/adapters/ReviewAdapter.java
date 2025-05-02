@@ -1,14 +1,18 @@
 package com.example.cs_15_fyp.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.models.Review;
 
@@ -18,12 +22,14 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
 
     private List<Review> reviews;
     private OnItemClickListener listener;
+    private Context context;
 
     public interface OnItemClickListener {
         void onItemClick(Review review);
     }
 
-    public ReviewAdapter(List<Review> reviews) {
+    public ReviewAdapter(Context context, List<Review> reviews) {
+        this.context = context;
         this.reviews = reviews;
     }
 
@@ -50,7 +56,37 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         holder.usernameText.setText(review.getUsername());
         holder.commentText.setText(review.getComment());
         holder.ratingBar.setRating(review.getRating());
-        holder.photoCount.setText(review.getPhotos() != null ? review.getPhotos().size() + " photos" : "No photos");
+        
+        List<String> photos = review.getPhotos();
+        if (photos != null && !photos.isEmpty()) {
+            holder.photoCount.setText(photos.size() + " photos");
+            
+            if (photos.size() == 1) {
+                // Display single image directly
+                holder.singleImage.setVisibility(View.VISIBLE);
+                holder.imagePager.setVisibility(View.GONE);
+                
+                Glide.with(context)
+                    .load(photos.get(0))
+                    .centerCrop()
+                    .into(holder.singleImage);
+            } else if (photos.size() > 1) {
+                // Use ViewPager for multiple images
+                holder.singleImage.setVisibility(View.GONE);
+                holder.imagePager.setVisibility(View.VISIBLE);
+                
+                ReviewImageAdapter imageAdapter = new ReviewImageAdapter(context, photos);
+                holder.imagePager.setAdapter(imageAdapter);
+            } else {
+                // No images
+                holder.singleImage.setVisibility(View.GONE);
+                holder.imagePager.setVisibility(View.GONE);
+            }
+        } else {
+            holder.photoCount.setText("No photos");
+            holder.singleImage.setVisibility(View.GONE);
+            holder.imagePager.setVisibility(View.GONE);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -73,6 +109,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     static class ReviewViewHolder extends RecyclerView.ViewHolder {
         TextView usernameText, commentText, photoCount;
         RatingBar ratingBar;
+        ImageView singleImage;
+        ViewPager2 imagePager;
 
         public ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +118,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             commentText = itemView.findViewById(R.id.reviewComment);
             photoCount = itemView.findViewById(R.id.reviewPhotoCount);
             ratingBar = itemView.findViewById(R.id.reviewRatingBar);
+            singleImage = itemView.findViewById(R.id.reviewSingleImage);
+            imagePager = itemView.findViewById(R.id.reviewImagePager);
         }
     }
 }

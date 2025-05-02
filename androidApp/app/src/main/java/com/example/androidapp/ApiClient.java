@@ -1,0 +1,1 @@
+private static final String BASE_URL = "http://10.0.2.2:2001/"; // special alias for localhost (127.0.0.1) on the emulator only 

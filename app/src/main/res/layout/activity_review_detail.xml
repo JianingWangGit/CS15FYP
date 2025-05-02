@@ -40,14 +40,31 @@
             android:textSize="16sp"
             android:layout_marginBottom="12dp" />
 
-        <!-- Photo Count (or later: Photo Slider) -->
+        <!-- Photo Count -->
         <TextView
             android:id="@+id/detailPhotoCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="3 photos"
             android:textSize="14sp"
-            android:textColor="#666666" />
+            android:textColor="#666666"
+            android:layout_marginBottom="8dp" />
+            
+        <!-- Images -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/detailImagePager"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:visibility="gone" />
+            
+        <!-- Single Image (for single photo reviews) -->
+        <ImageView
+            android:id="@+id/detailSingleImage"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
 
     </LinearLayout>
 </ScrollView>
