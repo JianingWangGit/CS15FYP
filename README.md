@@ -1,11 +1,13 @@
 # CS15-FYP Full-Stack Review Platform
 
+Final Year Project for FIT3162 units at Monash University, Australia.
 This project is an Android-based food review platform for Monash University students and staff. 
 It supports posting reviews with star ratings, text, and optional images. Business owners can respond to each review.
 
 ## 🔌 Technologies Used
-
-- **Frontend**: Android Studio (Java + XML) +  Firebase Storage
+(We are not upload the google-service-account.json file for the security reason, If you put that file under app folder everything will work fine)
+- **Frontend**: Android Studio (Java + XML) 
+- **Authentication**: Firebase Authentication
 - **Backend**: Node.js + Express
 - **Database**: MongoDB Atlas
 - **Image Storage**: Firebase Storage
@@ -16,61 +18,63 @@ Firebase **Storage** to upload and host review images. This prevents oversized p
 ## 📁 Project Structure
 
 ```plaintext
-CS-15-FYP/
-    ├── app/                      # Android frontend (Java + XML)
-    │   └── src/
-    │       └── main/
-    │           ├── java/com/example/cs_15_fyp/  # Java activity & adapter classes
-    │               ├── activities/
-    │                   ├──MainActivity
-    │                   ├──InfoRestaurantActivity
-    │                   ├──GiveReviewActivity
-    │                   ├── AllReviewsActivity
-    │               ├── fragments/
-    │                   ├──RestaurantSearchFragment
-    │                   ├──NotificationsFragment
-    │                   ├──UserProfileFragment
-    │
-    │               ├── adapters/               # RecyclerView adapters
-    │                   ├── ReviewAdapter.java
-    │               ├── models/                 # Data models
-    │                   ├── Review.java
-    │               ├── api/                    # Retrofit API interfaces
-    │                   ├── ApiClient.java
-    │                   ├── ReviewApi.java
-    │
-    │           └── res/
-    │               ├── layout/                 # XML layouts
-    │                   ├── activity_info_restaurant.xml
-    │                   ├── activity_give_review.xml
-    │                   ├── activity_all_reviews.xml
-    │                   ├── item_review.xml     # Layout for individual review items
-    │
-    │               └── drawable/               # Images, icons, backgrounds
-    │                   ├── ic_launcher.png     # App launcher icon
-    │                   ├── background_main.xml # XML drawable for main screen background
-    │                   ├── btn_rounded.xml     # XML drawable for rounded buttons
-    │                   ├── star_filled.png     # Icon for filled star (used in ratings)
-    │                   ├── star_empty.png      # Icon for empty star (used in ratings)
-    │                   ├── placeholder.png     # Placeholder image for reviews without images
-    │
-    ├── nodeBackEnd/              # Node.js backend API
-    │   ├── config/               # MongoDB connection setup
-    │       └── mongodb.js
-    │   ├── models/               # Mongoose schemas (e.g., Review)
-    │       ├── review.js         # Review schema
-    │   ├── routes/               # Route handlers (e.g., reviewRoutes.js)
-    │       ├── reviewRoutes.js
-    │   ├── app.js                # Express app logic (middleware, routes)
-    │   ├── server.js             # Entry point to start the server
-    │   ├── .env                  # Environment variables (MongoDB URI, PORT)
-    │   ├── .gitignore            # Ignore node_modules, .env, etc.
-    │   ├── package.json          # Node.js dependencies
-    │   └── package-lock.json     # Node.js dependency lock file
-    |   ├── gradle.properties       # Gradle properties for Android project
-    |   ├── build.gradle            # Gradle build file for Android project
-    |   ├── settings.gradle         # Gradle settings file for Android project
-    └── README.md                # Project documentation
+    CS-15-FYP/
+    ├── app/                                # Android frontend (Java + XML)
+    │   └── src/                            # Source code for Android app
+    │       └── main/                       
+    │           ├── java/com/example/cs_15_fyp/     # logic for Android app
+    │           │   ├── activities/
+    │           │   │   ├── MainActivity
+    │           │   │   ├── InfoRestaurantActivity
+    │           │   │   ├── GiveReviewActivity
+    │           │   │   ├── AllReviewsActivity
+    │           │   │   ├── ReviewDetailActivity
+    │           │   │   ├── LoginActivity
+    │           │   │   ├── SignUpActivity
+    │           │   │   ├── ChangeEmailActivity
+    │           │   │   └── ChangePasswordActivity
+    │           │   ├── fragments/
+    │           │   │   ├── RestaurantSearchFragment
+    │           │   │   ├── NotificationsFragment
+    │           │   │   └── UserProfileFragment
+    │           │   ├── adapters/
+    │           │   │   ├── ReviewAdapter.java
+    │           │   │   ├── RestaurantAdapter.java
+    │           │   │   └── ImagePagerAdapter.java
+    │           │   ├── models/
+    │           │   │   ├── Review.java
+    │           │   │   ├── Restaurant.java
+    │           │   │   └── ApiResponse.java
+    │           │   └── api/
+    │           │       ├── ApiClient.java
+    │           │       ├── ReviewApi.java
+    │           │       └── RestaurantService.java
+    │           └── res/                            # Resources for Android app (UI elements)
+    │               ├── layout/             # XML layout files for activities, fragments, and item views
+    │               └── drawable/           # Icons, backgrounds, buttons, and image placeholders
+    │ 
+    ├── nodeBackEnd/                        # Node.js backend (Express + MongoDB)
+    │   ├── config/
+    │   │   └── mongodb.js                  # MongoDB connection config
+    │   ├── models/
+    │   │   ├── review_model.js             # Mongoose schema for reviews
+    │   │   └── restaurant_model.js         # Mongoose schema for restaurants
+    │   ├── routers/
+    │   │   ├── review_routes.js            # Review-related API endpoints
+    │   │   └── restaurant_routes.js        # Restaurant-related API endpoints
+    │   ├── scripts/
+    │   │   └── seedRestaurants.js          # Script to populate DB with sample restaurants
+    │   ├── app.js                          # Express app configuration
+    │   ├── server.js                       # Server entry point
+    │   ├── .env                            # Environment config (e.g., MONGO_URI, PORT)
+    │   ├── .gitignore
+    │   ├── package.json
+    │   └── package-lock.json
+    
+    ├── gradle.properties                   # Gradle configuration for Android
+    ├── build.gradle
+    ├── settings.gradle
+    └── README.md                           # Project documentation
 ```
 
 ---

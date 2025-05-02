@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".activities.ChangeEmailActivity">
+
+    <TextView
+        android:id="@+id/changepass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Change Email"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#4CAF50"
+        android:textSize="34sp"
+        android:textStyle="bold" />
+
+    <!--<EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Old Email Address"
+        android:textColor="#7E7A7A"
+        android:textColorHint="#7E7A7A"
+        android:textSize="12dp"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginTop="18dp"
+        android:padding="12dp"
+        android:inputType="textEmailAddress"
+        android:id="@+id/old_email"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Current Password"
+        android:textColor="#7E7A7A"
+        android:textColorHint="#7E7A7A"
+        android:textSize="12dp"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginTop="12dp"
+        android:padding="12dp"
+        android:inputType="textEmailAddress"
+        android:id="@+id/password"
+        />-->
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="New Email Address"
+        android:textColor="#7E7A7A"
+        android:textColorHint="#7E7A7A"
+        android:textSize="12dp"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginTop="12dp"
+        android:padding="12dp"
+        android:inputType="textEmailAddress"
+        android:id="@+id/new_email"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Reset"
+        android:backgroundTint="#4CAF50"
+        android:textColorHint="@color/white"
+        android:padding="8dp"
+        android:id="@+id/change_email_button"
+        />
+
+</LinearLayout>
