@@ -50,24 +50,9 @@ Firebase **Storage** to upload and host review images. This prevents oversized p
     │           │       ├── ReviewApi.java
     │           │       └── RestaurantService.java
     │           └── res/                            # Resources for Android app (UI elements)
-    │               ├── layout/
-    │               │   ├── activity_all_reviews.xml
-    │               │   ├── activity_change_email.xml
-    │               │   ├── activity_change_password.xml
-    │               │   ├── activity_give_review.xml
-    │               │   ├── activity_info_restaurant.xml
-    │               │   ├── activity_login.xml
-    │               │   ├── activity_main.xml
-    │               │   ├── activity_review_detail.xml
-    │               │   ├── activity_sign_up.xml
-    │               │   ├── fragment_notifications.xml
-    │               │   ├── fragment_restaurant_search.xml
-    │               │   ├── fragment_user_profile.xml
-    │               │   ├── image_page_item.xml
-    │               │   ├── item_restaurant.xml
-    │               │   └── item_review.xml
+    │               ├── layout/             # XML layout files for activities, fragments, and item views
     │               └── drawable/           # Icons, backgrounds, buttons, and image placeholders
-    
+    │ 
     ├── nodeBackEnd/                        # Node.js backend (Express + MongoDB)
     │   ├── config/
     │   │   └── mongodb.js                  # MongoDB connection config
