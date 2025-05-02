@@ -50,7 +50,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         // RecyclerView setup
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ReviewAdapter(new ArrayList<>());
+        adapter = new ReviewAdapter(this, new ArrayList<>());
         reviewRecyclerView.setAdapter(adapter);
 
         // Write a Review button

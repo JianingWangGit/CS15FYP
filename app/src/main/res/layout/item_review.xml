@@ -9,7 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <!-- Username -->
         <TextView
@@ -50,6 +51,23 @@
             android:layout_height="wrap_content"
             android:text="3 photos"
             android:textSize="12sp"
-            android:textColor="#666" />
+            android:textColor="#666" 
+            android:layout_marginBottom="4dp"/>
+            
+        <!-- Review Images -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/reviewImagePager"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:visibility="gone" />
+            
+        <!-- Single Image (for single photo reviews) -->
+        <ImageView
+            android:id="@+id/reviewSingleImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

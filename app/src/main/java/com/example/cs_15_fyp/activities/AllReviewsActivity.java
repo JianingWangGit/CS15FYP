@@ -46,7 +46,7 @@ public class AllReviewsActivity extends AppCompatActivity {
         // Setup RecyclerView and Adapter
         allReviewsRecyclerView = findViewById(R.id.allReviewsRecyclerView);
         allReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reviewAdapter = new ReviewAdapter(new ArrayList<>());
+        reviewAdapter = new ReviewAdapter(this, new ArrayList<>());
         allReviewsRecyclerView.setAdapter(reviewAdapter);
 
         reviewAdapter.setOnItemClickListener(review -> {
