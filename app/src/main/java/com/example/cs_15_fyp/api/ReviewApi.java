@@ -1,5 +1,6 @@
 package com.example.cs_15_fyp.api;
 
+import com.example.cs_15_fyp.models.Reply;
 import com.example.cs_15_fyp.models.Review;
 
 import java.util.List;
@@ -7,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ReviewApi {
@@ -21,5 +23,11 @@ public interface ReviewApi {
 
     @POST("/reviews")
     Call<Review> submitReview(@Body Review review);
+
+    @POST("reviews/{reviewId}/reply")
+    Call<Review> postReply(
+        @Path("reviewId") String reviewId,
+        @Body Reply reply
+    );
 }
 

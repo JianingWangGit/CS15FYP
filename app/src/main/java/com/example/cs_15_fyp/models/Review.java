@@ -1,5 +1,6 @@
 package com.example.cs_15_fyp.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
@@ -11,6 +12,8 @@ public class Review implements Serializable {
     private float rating;
 
     private List<String> photos;
+
+    private List<Reply> replies = new ArrayList<>();
 
     public Review(String restaurantId, String username, String comment, float rating, List<String> photos) {
         this.restaurantId = restaurantId;
@@ -37,6 +40,14 @@ public class Review implements Serializable {
 
     public List<String> getPhotos() {
         return photos;
+    }
+
+    public List<Reply> getReplies() {
+        return replies;
+    }
+
+    public void addReplies(Reply reply) {
+        this.replies.add(reply);
     }
 }
 

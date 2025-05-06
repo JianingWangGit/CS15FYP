@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
-
+}
 android {
     namespace = "com.example.cs_15_fyp"
     compileSdk = 35
