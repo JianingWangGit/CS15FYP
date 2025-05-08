@@ -1,11 +1,15 @@
 package com.example.cs_15_fyp.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
 public class Review implements Serializable {
 
+    @SerializedName("_id")
+    private String id;
     private String restaurantId;
     private String username;
     private String comment;
@@ -23,6 +27,11 @@ public class Review implements Serializable {
         this.photos = photos;
     }
 
+
+    // Getters and Setters
+    public String getId() {
+        return id;
+    }
     public String getRestaurantId() {
         return restaurantId;
     }
@@ -46,7 +55,7 @@ public class Review implements Serializable {
         return replies;
     }
 
-    public void addReplies(Reply reply) {
+    public void addReply(Reply reply) {
         this.replies.add(reply);
     }
 }

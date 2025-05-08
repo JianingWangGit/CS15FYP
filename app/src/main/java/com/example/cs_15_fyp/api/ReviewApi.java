@@ -7,7 +7,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,10 +26,25 @@ public interface ReviewApi {
     @POST("/reviews")
     Call<Review> submitReview(@Body Review review);
 
-    @POST("reviews/{reviewId}/reply")
+    @GET("reviews/{id}/replies")
+    Call<List<Reply>> getReplies(@Path("id") String reviewId);
+    @POST("reviews/{id}/reply")
     Call<Review> postReply(
-        @Path("reviewId") String reviewId,
+        @Path("id") String reviewId,
         @Body Reply reply
+    );
+    @PUT("/reviews/{id}/replies/{replyId}")
+    Call<Review> updateReply(
+            @Path("id") String reviewId,
+            @Path("replyId") String replyId,
+            @Body Reply reply
+    );
+
+    @HTTP(method = "DELETE", path = "/reviews/{id}/replies/{replyId}", hasBody = true)
+    Call<Review> deleteReply(
+            @Path("id") String reviewId,
+            @Path("replyId") String replyId,
+            @Body String email
     );
 }
 

@@ -32,7 +32,4 @@ public class ApiClient {
         return getClient().create(RestaurantService.class);
     }
 
-    public static ReplyService getResponseApi() {
-        return retrofit.create(ReplyService.class);
-    }
 }
