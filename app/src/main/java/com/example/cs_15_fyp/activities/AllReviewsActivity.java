@@ -36,7 +36,7 @@ public class AllReviewsActivity extends AppCompatActivity {
     private Button btnFavorites, btnFilter, btnAddReview;
     private TextView restaurantName, restaurantMenu;
 
-    private static final int PAGE_SIZE = 10;  // Number of reviews to fetch at a time
+    private static final int PAGE_SIZE = 10;  // Number of reviews to fetch at one time
     private int currentPage = 0;
     private boolean isLoading = false;
     private String restaurantId;
