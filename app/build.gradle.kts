@@ -1,6 +1,9 @@
+// File: app/build.gradle.kts
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+}
 
 android {
     namespace = "com.example.cs_15_fyp"
@@ -25,9 +28,11 @@ android {
             )
         }
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -35,48 +40,37 @@ android {
 }
 
 dependencies {
-
+    // Core Android
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
-    
-    // Firebase dependencies
-    implementation(libs.firebase.database)
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+
+    // Firebase BOM - Only one version
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage")
-    
-    // Glide for image loading
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.firebase:firebase-firestore")
 
-    implementation(libs.firebase.auth)
+    // Google Auth
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // Android Credentials API
     implementation(libs.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.activity:activity:1.10.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-    //implementation("com.google.firebase:firebase-bom:31.5.0")
-    //implementation("com.google.firebase:firebase-auth-ktx")
-    //implementation("com.google.android.gms:play-services-auth:20.5.0")
-
-    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("androidx.credentials:credentials:1.5.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
-    implementation ("com.google.firebase:firebase-firestore:25.1.4")
 }

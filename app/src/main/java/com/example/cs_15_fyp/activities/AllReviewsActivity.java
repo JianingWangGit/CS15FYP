@@ -2,6 +2,12 @@ package com.example.cs_15_fyp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +32,9 @@ public class AllReviewsActivity extends AppCompatActivity {
 
     private RecyclerView allReviewsRecyclerView;
     private ReviewAdapter reviewAdapter;
+    private EditText searchBar;
+    private Button btnFavorites, btnFilter, btnAddReview;
+    private TextView restaurantName, restaurantMenu;
 
     private static final int PAGE_SIZE = 10;  // Number of reviews to fetch at a time
     private int currentPage = 0;
@@ -42,6 +51,14 @@ public class AllReviewsActivity extends AppCompatActivity {
         if (intent != null) {
             restaurantId = getIntent().getStringExtra("restaurantId");
         }
+
+        // Setup UI elements
+        searchBar = findViewById(R.id.searchBar);
+        btnFavorites = findViewById(R.id.btnFavorites);
+        btnFilter = findViewById(R.id.btnFilter);
+        btnAddReview = findViewById(R.id.btnAddReview);
+        restaurantName = findViewById(R.id.restaurantName);
+        restaurantMenu = findViewById(R.id.restaurantMenu);
 
         // Setup RecyclerView and Adapter
         allReviewsRecyclerView = findViewById(R.id.allReviewsRecyclerView);
@@ -66,6 +83,36 @@ public class AllReviewsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Setup search bar listener (stub)
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO: Implement search filter for reviews
+            }
+        });
+
+        // Setup button listeners (stubs)
+        btnFavorites.setOnClickListener(v -> {
+            // TODO: Show favorite reviews or handle favorite action
+            Toast.makeText(this, "Favorites clicked", Toast.LENGTH_SHORT).show();
+        });
+        btnFilter.setOnClickListener(v -> {
+            // TODO: Show filter dialog
+            Toast.makeText(this, "Filter clicked", Toast.LENGTH_SHORT).show();
+        });
+        btnAddReview.setOnClickListener(v -> {
+            // TODO: Navigate to add review screen
+            Toast.makeText(this, "Add review clicked", Toast.LENGTH_SHORT).show();
+        });
+
+        // Optionally set restaurant name/menu (if available)
+        // restaurantName.setText(...);
+        // restaurantMenu.setText(...);
 
         // Initial load
         loadAllReviews();

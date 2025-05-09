@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="Notifications"
-        android:icon="@drawable/baseline_notifications_24"
-        android:id="@+id/notifications"/>
-    <item android:title="Search"
-        android:icon="@drawable/baseline_search_24"
-        android:id="@+id/search"/>
-    <item android:title="Profile"
-        android:icon="@drawable/baseline_person_24"
-        android:id="@+id/profile"/>
+    <item
+        android:id="@+id/menu_notifications"
+        android:icon="@drawable/ic_notifications"
+        android:title="Notifications" />
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search" />
+    <item
+        android:id="@+id/menu_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
 </menu>
