@@ -34,6 +34,7 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -71,8 +72,13 @@ public class LoginActivity extends AppCompatActivity {
                     auth.signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener(authResult -> {
                                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
+                                if (isBusinessAccount(email)) {
+                                    startActivity(new Intent(LoginActivity.this, BusinessProfileActivity.class));
+                                    finish();
+                                } else {
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    finish();
+                                }
                             })
                             .addOnFailureListener(e ->
                                     Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show());
@@ -142,11 +148,22 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(LoginActivity.this, "Google Login Successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
+                        if (isBusinessAccount(loginEmail.getText().toString())) {
+                            startActivity(new Intent(LoginActivity.this, BusinessProfileActivity.class));
+                            finish();
+                        } else {
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        }
                     } else {
                         Toast.makeText(LoginActivity.this, "Google Login Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private boolean isBusinessAccount(String email) {
+        // Implement your logic to check if the email belongs to a business account
+        // This is a placeholder and should be replaced with actual implementation
+        return email.endsWith("@business.com");
     }
 }
