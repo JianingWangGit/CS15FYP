@@ -1,112 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
-    <LinearLayout
+    <!-- Toolbar for back navigation -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:title="Write a Review"
+        android:titleTextColor="@android:color/white"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
 
-        <!-- Review title -->
-        <TextView
+    <!-- Scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Write your review"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
-        <!-- Review input -->
-        <EditText
-            android:id="@+id/editTextReview"
-            android:layout_width="match_parent"
-            android:layout_height="117dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/edittext_border"
-            android:gravity="top"
-            android:hint="Describe your experience..."
-            android:inputType="textMultiLine"
-            android:padding="10dp" />
-
-        <!-- Rating -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Rating (1 - very bad, 5 - excellent)"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:numStars="5"
-            android:stepSize="0.5" />
-
-        <TextView
-            android:id="@+id/ratingDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Your rating: 0 ⭐"
-            android:textColor="#000000"
-            android:textSize="14sp" />
-
-        <!-- Upload button -->
-        <Button
-            android:id="@+id/btnUploadPhotos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:backgroundTint="#DDDDDD"
-            android:text="Upload Photos"
-            android:textColor="#000000" />
-
-        <!-- Photo count label (just above photo frame, no marginBottom) -->
-        <TextView
-            android:id="@+id/photoCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="end"
-            android:background="#CCCCCC"
-            android:padding="4dp"
-            android:text="0 photos"
-            android:textColor="#000000"
-            android:textSize="12sp" />
-
-        <!-- Photo frame -->
-        <FrameLayout
-            android:id="@+id/photoFrame"
-            android:layout_width="match_parent"
-            android:layout_height="230dp"
-            android:background="#F5F5F5"
-            android:padding="4dp">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPagerPhotos"
+            <!-- Review title -->
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                android:text="Write your review"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#000000" />
 
-        <!-- Submit button -->
-        <Button
-            android:id="@+id/btnSubmitReview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit Review"
-            android:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp" />
-    </LinearLayout>
-</ScrollView>
+            <!-- Review input -->
+            <EditText
+                android:id="@+id/editTextReview"
+                android:layout_width="match_parent"
+                android:layout_height="117dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edittext_border"
+                android:gravity="top"
+                android:hint="Describe your experience..."
+                android:inputType="textMultiLine"
+                android:padding="10dp" />
+
+            <!-- Rating -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Rating (1 - very bad, 5 - excellent)"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:numStars="5"
+                android:stepSize="0.5" />
+
+            <TextView
+                android:id="@+id/ratingDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Your rating: 0 ⭐"
+                android:textColor="#000000"
+                android:textSize="14sp" />
+
+            <!-- Upload button -->
+            <Button
+                android:id="@+id/btnUploadPhotos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="#DDDDDD"
+                android:text="Upload Photos"
+                android:textColor="#000000" />
+
+            <!-- Photo count label -->
+            <TextView
+                android:id="@+id/photoCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="end"
+                android:background="#CCCCCC"
+                android:padding="4dp"
+                android:text="0 photos"
+                android:textColor="#000000"
+                android:textSize="12sp" />
+
+            <!-- Photo frame -->
+            <FrameLayout
+                android:id="@+id/photoFrame"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:background="#F5F5F5"
+                android:padding="4dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPagerPhotos"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </FrameLayout>
+
+            <!-- Submit button -->
+            <Button
+                android:id="@+id/btnSubmitReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit Review"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

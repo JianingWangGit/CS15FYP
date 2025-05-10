@@ -1,88 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/reviewDetailMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:padding="20dp">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
 
-    <LinearLayout
+    <!-- Toolbar for back navigation -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:title="Review Details"
+        android:titleTextColor="@android:color/white"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
 
-        <!-- Username -->
-        <TextView
-            android:id="@+id/detailReviewUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Username"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Rating -->
-        <RatingBar
-            android:id="@+id/detailReviewRatingBar"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:numStars="5"
-            android:stepSize="0.5"
-            android:isIndicator="true"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Comment -->
-        <TextView
-            android:id="@+id/detailReviewComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Full review comment here."
-            android:textSize="16sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="12dp" />
-
-        <!-- Photo Count -->
-        <TextView
-            android:id="@+id/detailPhotoCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3 photos"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="8dp" />
-            
-        <!-- Images -->
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/detailImagePager"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:visibility="gone" />
-            
-        <!-- Single Image (for single photo reviews) -->
-        <ImageView
-            android:id="@+id/detailSingleImage"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
-            android:visibility="gone" />
-
-        <!-- Responses -->
-        <Button
-            android:id="@+id/btnReply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Respond to Review"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center_horizontal" />
+    <!-- Scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="20dp">
 
         <LinearLayout
-            android:id="@+id/detailReplies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp" />
+            android:orientation="vertical">
 
-    </LinearLayout>
-</ScrollView>
+            <!-- Username -->
+            <TextView
+                android:id="@+id/detailReviewUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Rating -->
+            <RatingBar
+                android:id="@+id/detailReviewRatingBar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:isIndicator="true"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Comment -->
+            <TextView
+                android:id="@+id/detailReviewComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Full review comment here."
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Photo Count -->
+            <TextView
+                android:id="@+id/detailPhotoCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 photos"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
+
+            <!-- ViewPager for multiple images -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/detailImagePager"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="gone" />
+
+            <!-- Single Image -->
+            <ImageView
+                android:id="@+id/detailSingleImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:visibility="gone" />
+
+            <!-- Reply button -->
+            <Button
+                android:id="@+id/btnReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Respond to Review"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal" />
+
+            <!-- Replies container -->
+            <LinearLayout
+                android:id="@+id/detailReplies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

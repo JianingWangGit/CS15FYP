@@ -2,11 +2,12 @@ package com.example.cs_15_fyp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -28,7 +29,7 @@ import retrofit2.Retrofit;
 public class InfoRestaurantActivity extends AppCompatActivity {
 
     private ReviewAdapter adapter;
-    private String restaurantId;  // ✅ Correct type = String
+    private String restaurantId;
     private String restaurantNameText;
 
     @Override
@@ -42,26 +43,26 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         // UI Elements
         Button btnGoToGiveReview = findViewById(R.id.btnGoToGiveReview);
         Button btnSeeAllReviews = findViewById(R.id.btnSeeAllReviews);
         EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
-        // RecyclerView setup
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ReviewAdapter(this, new ArrayList<>());
         reviewRecyclerView.setAdapter(adapter);
 
-        // Write a Review button
-        btnGoToGiveReview.setOnClickListener(v -> {
-            Intent intent = new Intent(this, GiveReviewActivity.class);
-            intent.putExtra("restaurantId", restaurantId);  // ✅ pass as String
-            intent.putExtra("restaurantName", restaurantNameText);
-            startActivity(intent);
-        });
-
-        // Receive intent data
+        // Get data from intent
         Intent received = getIntent();
         if (received != null) {
             restaurantNameText = received.getStringExtra("restaurantName");
@@ -72,21 +73,28 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             }
         }
 
+        if (restaurantNameText == null) restaurantNameText = "Restaurant Info";
         restaurantName.setText(restaurantNameText);
+        getSupportActionBar().setTitle(restaurantNameText); // dynamic title
 
-        // See All Reviews button
-        btnSeeAllReviews.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllReviewsActivity.class);
-            intent.putExtra("restaurantId", restaurantId);  // ✅ pass as String
+        btnGoToGiveReview.setOnClickListener(v -> {
+            Intent intent = new Intent(this, GiveReviewActivity.class);
+            intent.putExtra("restaurantId", restaurantId);
+            intent.putExtra("restaurantName", restaurantNameText);
             startActivity(intent);
         });
 
-        // Load preview reviews
+        btnSeeAllReviews.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AllReviewsActivity.class);
+            intent.putExtra("restaurantId", restaurantId);
+            startActivity(intent);
+        });
+
         loadPreviewReviews();
     }
 
     private void loadPreviewReviews() {
-        if (restaurantId == null || restaurantId.isEmpty()) return;  // no valid ID
+        if (restaurantId == null || restaurantId.isEmpty()) return;
 
         Retrofit retrofit = ApiClient.getClient();
         ReviewApi reviewApi = retrofit.create(ReviewApi.class);
@@ -109,6 +117,6 @@ public class InfoRestaurantActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadPreviewReviews();  // refresh on return
+        loadPreviewReviews();
     }
 }

@@ -24,6 +24,7 @@ import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Reply;
 import com.example.cs_15_fyp.models.Review;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.List;
 
@@ -49,6 +50,15 @@ public class ReviewDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_detail);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Review Detail");
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         // Initialize API
         reviewApi = ApiClient.getReviewApi();
