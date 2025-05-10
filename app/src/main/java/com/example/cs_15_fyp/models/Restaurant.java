@@ -15,7 +15,7 @@ public class Restaurant {
     private double priceRange; // 1-4 representing $, $$, $$$, $$$$
 
     public Restaurant(String id, String name, String description, String cuisine, 
-                     double rating, String address, String imageUrl, 
+                     double rating, String address, String imageUrl,
                      boolean isOpen, double priceRange) {
         this.id = id;
         this.name = name;
@@ -41,10 +41,10 @@ public class Restaurant {
 
     // Setters
     public void setId(String id) { this.id = id; }
+    public void setRating(double rating) { this.rating = rating; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
     public void setCuisine(String cuisine) { this.cuisine = cuisine; }
-    public void setRating(double rating) { this.rating = rating; }
     public void setAddress(String address) { this.address = address; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public void setOpen(boolean open) { isOpen = open; }

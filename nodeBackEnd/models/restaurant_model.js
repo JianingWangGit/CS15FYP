@@ -16,6 +16,7 @@ const restaurantSchema = new mongoose.Schema({
     rating: {
         type: Number,
         required: true,
+        default: 2,
         min: 0,
         max: 5
     },
@@ -40,4 +41,4 @@ const restaurantSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Restaurant', restaurantSchema); 
+module.exports = mongoose.model('Restaurant', restaurantSchema);

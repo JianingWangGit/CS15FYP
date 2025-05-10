@@ -1,0 +1,21 @@
+Testing Results Note: Incomplete Functionality Todo
+1. The search bar is not working for the restaurant search and info pages. [or can mark it as the adv]
+2. Missing images display:
+    (1) Restaurant image
+    (2) Restaurant menu page - for refine feature [or can mark it as the adv]
+3. Reply functionality issues:
+- Images cannot be uploaded in replies.
+- Users cannot reply to existing replies.
+- The current reply model is not independent (should not inside the review model).
+- and is not correctly associated with the review ID, restaurant ID, etc.
+4. User/Business perspectives are not clearly differentiated. Selecting "Business" or "User" currently makes no functional difference.
+5. Review and reply data are not correctly associated with user type and user ID.
+6. The "Your Reviews" button in the user profile is not linked to the user ID and does not display the correct data.
+7. Adding the test cases/seed cases for display with meaningful real world data.
+    (Restaurant data/image can do first, after fixing the review and reply issue will do it later)
+8. Inconsistent review rating and not real
+9. Unclear Error Messages
+    (1) Display message need to improve for the email validation in sign up page
+    (2) Debug Toast, Vague message and Typos/casual phrasing in GiveReviewActivity
+10. Review Detail page need to further update UI and Functionality
+10. Wording refine

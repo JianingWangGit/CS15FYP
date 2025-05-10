@@ -18,12 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
+import com.example.cs_15_fyp.api.RestaurantService;
 import com.example.cs_15_fyp.api.ReviewApi;
+import com.example.cs_15_fyp.models.ApiResponse;
+import com.example.cs_15_fyp.models.Restaurant;
 import com.example.cs_15_fyp.models.Review;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class InfoRestaurantActivity extends AppCompatActivity {
@@ -31,6 +37,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
     private ReviewAdapter adapter;
     private String restaurantId;
     private String restaurantNameText;
+    private TextView ratingNumberText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         Button btnSeeAllReviews = findViewById(R.id.btnSeeAllReviews);
         EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
+        ratingNumberText = findViewById(R.id.ratingNumber);
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ReviewAdapter(this, new ArrayList<>());
@@ -90,7 +98,30 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        loadRestaurantDetails();
         loadPreviewReviews();
+    }
+
+    private void loadRestaurantDetails() {
+        RestaurantService restaurantService = ApiClient.getRestaurantApi();
+        restaurantService.getAllRestaurants().enqueue(new Callback<ApiResponse<List<Restaurant>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Restaurant>>> call, Response<ApiResponse<List<Restaurant>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Restaurant r : response.body().getData()) {
+                        if (r.getId().equals(restaurantId)) {
+                            ratingNumberText.setText(String.format("%.1f", r.getRating()));
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
+                Log.e("InfoRestaurant", "Failed to load restaurant rating", t);
+            }
+        });
     }
 
     private void loadPreviewReviews() {
@@ -117,6 +148,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadRestaurantDetails();
         loadPreviewReviews();
     }
 }

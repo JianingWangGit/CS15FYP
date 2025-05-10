@@ -165,10 +165,8 @@ public class GiveReviewActivity extends AppCompatActivity {
         // Get restaurantId from intent
         String restaurantId = getIntent().getStringExtra("restaurantId");
         if (restaurantId == null || restaurantId.isEmpty()) {
-            Toast.makeText(this, "Restaurant ID is missing in Intent!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
             return;
-        } else {
-            Toast.makeText(this, "Received restaurant ID: " + restaurantId, Toast.LENGTH_SHORT).show();
         }
 
         if (imageUris.isEmpty()) {
@@ -177,7 +175,7 @@ public class GiveReviewActivity extends AppCompatActivity {
         } else {
             // Show upload in progress
             btnSubmitReview.setEnabled(false);
-            Toast.makeText(this, "Uploading images...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Uploading your photos, please wait...", Toast.LENGTH_SHORT).show();
             
             // Upload images to Firebase Storage
             FirebaseStorageHelper.uploadReviewImages(imageUris)
@@ -190,9 +188,8 @@ public class GiveReviewActivity extends AppCompatActivity {
                 .exceptionally(e -> {
                     // Handle upload failure
                     runOnUiThread(() -> {
-                        Log.e(TAG, "Failed to upload images", e);
                         Toast.makeText(GiveReviewActivity.this, 
-                            "Failed to upload images: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            "Upload failed. Please check your internet connection and try again.", Toast.LENGTH_LONG).show();
                         btnSubmitReview.setEnabled(true);
                     });
                     return null;
@@ -208,7 +205,7 @@ public class GiveReviewActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Review> call, Response<Review> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(GiveReviewActivity.this, "Review submitted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GiveReviewActivity.this, "Thank you! Your review has been submitted.", Toast.LENGTH_SHORT).show();
                     editTextReview.setText("");
                     ratingBar.setRating(0f);
                     imageUris.clear();

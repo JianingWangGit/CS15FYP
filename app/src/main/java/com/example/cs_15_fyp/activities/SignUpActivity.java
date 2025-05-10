@@ -153,9 +153,12 @@ public class SignUpActivity extends AppCompatActivity {
                                     finish();
                                 } else {
                                     Exception e = task.getException();
-                                    Toast.makeText(SignUpActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    if (e != null && e.getMessage() != null && e.getMessage().contains("The email address is already in use")) {
+                                        Toast.makeText(SignUpActivity.this, "This email is already registered. Please log in.", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        Toast.makeText(SignUpActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
                                     e.printStackTrace();  // Print full exception in Logcat
-
                                 }
                             }
                         });

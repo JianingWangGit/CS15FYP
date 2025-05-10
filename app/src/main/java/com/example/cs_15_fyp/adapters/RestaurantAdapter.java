@@ -98,6 +98,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
 
             // Set placeholder image
             restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
+
         }
 
         private String getPriceRangeText(double priceRange) {
