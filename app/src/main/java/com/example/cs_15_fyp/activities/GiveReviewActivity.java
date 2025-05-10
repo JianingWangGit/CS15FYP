@@ -140,19 +140,6 @@ public class GiveReviewActivity extends AppCompatActivity {
         imagePickerLauncher.launch(Intent.createChooser(intent, "Select Pictures"));
     }
 
-    private String convertImageUriToBase64(Uri uri) {
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            inputStream.close();
-            return Base64.encodeToString(bytes, Base64.NO_WRAP); // NO_WRAP is cleaner
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     private void submitReview() {
         String comment = editTextReview.getText().toString().trim();
         float rating = ratingBar.getRating();
