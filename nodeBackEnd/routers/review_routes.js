@@ -8,7 +8,7 @@ const router = express.Router();
 const Review = require('../models/review_model');
 const Restaurant = require('../models/restaurant_model');
 
-// GET all reviews
+// GET all reviews (optional filter by restaurantId)
 router.get('/', async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = parseInt(req.query.skip) || 0;
@@ -31,7 +31,6 @@ router.post('/', async (req, res) => {
     try {
         const { restaurantId, userId, username, comment, rating, photos } = req.body;
 
-        // Validate required fields
         if (!restaurantId || !rating || !userId) {
             return res.status(400).json({
                 success: false,
@@ -39,7 +38,6 @@ router.post('/', async (req, res) => {
             });
         }
 
-        // Create and save the new review
         const newReview = new Review({
             restaurantId,
             userId,
@@ -51,15 +49,34 @@ router.post('/', async (req, res) => {
 
         await newReview.save();
 
-        // Update average rating for the restaurant
         const allReviews = await Review.find({ restaurantId });
         const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
-
         await Restaurant.findByIdAndUpdate(restaurantId, { rating: avg }, { new: true });
 
         res.status(201).json({ success: true, review: newReview });
     } catch (error) {
         console.error("Error submitting review:", error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// ✅ NEW: GET reviews by user ID
+router.get('/user', async (req, res) => {
+    const { userId } = req.query;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = parseInt(req.query.skip) || 0;
+
+    if (!userId) {
+        return res.status(400).json({ success: false, error: "Missing userId" });
+    }
+
+    try {
+        const reviews = await Review.find({ userId })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+        res.json(reviews);
+    } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
 });

@@ -21,12 +21,18 @@ public interface ReviewApi {
             @Query("skip") int skip
     );
 
-
-
     @POST("/reviews")
     Call<Review> submitReview(@Body Review review);
 
     @GET("/reviews/{id}")
     Call<Review> getReviewById(@Path("id") String reviewId);
+
+    @GET("/reviews/user")
+    Call<List<Review>> getReviewsByUser(
+            @Query("userId") String userId,
+            @Query("limit") int limit,
+            @Query("skip") int skip
+    );
+
 }
 
