@@ -3,9 +3,11 @@ package com.example.cs_15_fyp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -127,6 +129,37 @@ public class InfoRestaurantActivity extends AppCompatActivity {
                             } else {
                                 restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
                             }
+
+                            // Load menu images
+                            LinearLayout menuImagesContainer = findViewById(R.id.menuImagesContainer);
+                            View menuSection = findViewById(R.id.menuSection); // Add this ID to the parent LinearLayout in XML
+                            menuImagesContainer.removeAllViews(); // Clear existing views
+                            
+                            if (r.getMenuImages() != null && !r.getMenuImages().isEmpty()) {
+                                menuSection.setVisibility(View.VISIBLE);
+                                for (String imageUrl : r.getMenuImages()) {
+                                    ImageView imageView = new ImageView(InfoRestaurantActivity.this);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                            (int) (240 * getResources().getDisplayMetrics().density), // convert dp to pixels
+                                            (int) (180 * getResources().getDisplayMetrics().density)  // convert dp to pixels
+                                    );
+                                    params.setMarginEnd((int) (8 * getResources().getDisplayMetrics().density)); // convert dp to pixels
+                                    imageView.setLayoutParams(params);
+                                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    imageView.setBackgroundResource(R.drawable.rounded_image_background);
+                                    
+                                    Glide.with(InfoRestaurantActivity.this)
+                                        .load(imageUrl)
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .placeholder(R.drawable.placeholder_restaurant)
+                                        .error(R.drawable.placeholder_restaurant)
+                                        .into(imageView);
+                                    
+                                    menuImagesContainer.addView(imageView);
+                                }
+                            } else {
+                                menuSection.setVisibility(View.GONE);
+                            }
                             break;
                         }
                     }
@@ -135,7 +168,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
-                Log.e("InfoRestaurant", "Failed to load restaurant rating", t);
+                Log.e("InfoRestaurant", "Failed to load restaurant details", t);
             }
         });
     }

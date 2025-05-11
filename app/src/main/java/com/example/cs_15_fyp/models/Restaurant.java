@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.List;
 
 public class Restaurant {
     @SerializedName("_id")
@@ -16,11 +17,14 @@ public class Restaurant {
     private double rating;
     private String address;
     private String imageUrl;
+    @SerializedName("menuImages")
+    private List<String> menuImages;
     private Map<String, Map<String, String>> hours;
     private double priceRange; // 1-4 representing $, $$, $$$, $$$$
 
     public Restaurant(String id, String name, String description, String cuisine, 
                      double rating, String address, String imageUrl,
+                     List<String> menuImages,
                      Map<String, Map<String, String>> hours, double priceRange) {
         this.id = id;
         this.name = name;
@@ -29,6 +33,7 @@ public class Restaurant {
         this.rating = rating;
         this.address = address;
         this.imageUrl = imageUrl;
+        this.menuImages = menuImages;
         this.hours = hours;
         this.priceRange = priceRange;
     }
@@ -41,6 +46,7 @@ public class Restaurant {
     public double getRating() { return rating; }
     public String getAddress() { return address; }
     public String getImageUrl() { return imageUrl; }
+    public List<String> getMenuImages() { return menuImages; }
     public Map<String, Map<String, String>> getHours() { return hours; }
     public double getPriceRange() { return priceRange; }
 
@@ -52,6 +58,7 @@ public class Restaurant {
     public void setCuisine(String cuisine) { this.cuisine = cuisine; }
     public void setAddress(String address) { this.address = address; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setMenuImages(List<String> menuImages) { this.menuImages = menuImages; }
     public void setHours(Map<String, Map<String, String>> hours) { this.hours = hours; }
     public void setPriceRange(double priceRange) { this.priceRange = priceRange; }
 
