@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.CreateRestaurantActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SignUpActivity"
             android:exported="true">
             <intent-filter>
@@ -47,7 +50,7 @@
             android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activities.ReviewDetailActivity"
             android:exported="false" />

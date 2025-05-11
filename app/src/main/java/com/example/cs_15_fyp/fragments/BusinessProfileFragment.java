@@ -1,5 +1,6 @@
 package com.example.cs_15_fyp.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.activities.CreateRestaurantActivity;
 import com.example.cs_15_fyp.activities.LoginActivity;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.RestaurantService;
@@ -30,6 +32,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class BusinessProfileFragment extends Fragment {
+
+    private static final int REQUEST_CREATE_RESTAURANT = 101;
 
     private LinearLayout businessContent, emptyRestaurantSection;
     private TextView businessNameView;
@@ -59,10 +63,10 @@ public class BusinessProfileFragment extends Fragment {
             if (getActivity() != null) getActivity().finish();
         });
 
-        // Create button
+        // Create button — use startActivityForResult to refresh later
         createRestaurantButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "TODO: Launch CreateRestaurantActivity", Toast.LENGTH_SHORT).show();
-            // startActivity(new Intent(getActivity(), CreateRestaurantActivity.class));
+            Intent intent = new Intent(getActivity(), CreateRestaurantActivity.class);
+            startActivityForResult(intent, REQUEST_CREATE_RESTAURANT);
         });
 
         fetchBusinessRestaurant();
@@ -86,7 +90,7 @@ public class BusinessProfileFragment extends Fragment {
                     if (restaurants.isEmpty()) {
                         showNoRestaurantUI();
                     } else {
-                        Restaurant myRestaurant = restaurants.get(0); // Assume single for now
+                        Restaurant myRestaurant = restaurants.get(0); // Assume single
                         businessNameView.setText(myRestaurant.getName());
                         showBusinessUI();
                     }
@@ -111,5 +115,14 @@ public class BusinessProfileFragment extends Fragment {
     private void showBusinessUI() {
         emptyRestaurantSection.setVisibility(View.GONE);
         businessContent.setVisibility(View.VISIBLE);
+    }
+
+    // ✅ Refresh after returning from CreateRestaurantActivity
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CREATE_RESTAURANT && resultCode == Activity.RESULT_OK) {
+            fetchBusinessRestaurant(); // Refresh restaurant data
+        }
     }
 }
