@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Restaurant {
     @SerializedName("_id")
@@ -57,7 +58,9 @@ public class Restaurant {
     public boolean isOpen() {
         if (hours == null) return false;
 
-        Calendar calendar = Calendar.getInstance();
+        // Set timezone to Melbourne
+        TimeZone melbourneTimeZone = TimeZone.getTimeZone("Australia/Melbourne");
+        Calendar calendar = Calendar.getInstance(melbourneTimeZone);
         String currentDay = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US);
         
         Map<String, String> dayHours = hours.get(currentDay);
@@ -68,6 +71,7 @@ public class Restaurant {
         if (openTime == null || closeTime == null) return false;
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        timeFormat.setTimeZone(melbourneTimeZone);
         String currentTime = timeFormat.format(calendar.getTime());
 
         return currentTime.compareTo(openTime) >= 0 && currentTime.compareTo(closeTime) <= 0;
