@@ -26,6 +26,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET a review by it's id
+router.get('/:id', async (req, res) => {
+    try {
+        const review = await Review.findById(req.params.id);
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
+        res.json(review);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 // POST a new review
 router.post('/', async (req, res) => {

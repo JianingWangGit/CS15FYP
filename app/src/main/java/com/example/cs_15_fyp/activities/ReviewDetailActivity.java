@@ -22,8 +22,10 @@ import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewImageAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.ReplyApi;
+import com.example.cs_15_fyp.api.RestaurantService;
 import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Reply;
+import com.example.cs_15_fyp.models.Restaurant;
 import com.example.cs_15_fyp.models.Review;
 import androidx.appcompat.widget.Toolbar;
 
@@ -47,6 +49,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
     private Review review;
     private ReviewApi reviewApi;
     private ReplyApi replyApi;
+    private RestaurantService restaurantService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
         // Initialize API
         reviewApi = ApiClient.getReviewApi();
         replyApi = ApiClient.getReplyApi();
+        restaurantService = ApiClient.getRestaurantApi();
 
         // Bind views
         repliesContainer = findViewById(R.id.detailReplies);
@@ -116,24 +120,61 @@ public class ReviewDetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Reply>> call, Response<List<Reply>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<Reply> list = response.body();
+                    List<Reply> replies = response.body();
                     repliesContainer.removeAllViews();
-                    for (Reply r : list) {
-                        TextView tv = new TextView(ReviewDetailActivity.this);
-                        tv.setText(r.getUsername() + ": " + r.getComment());
-                        tv.setTextSize(14);
-                        tv.setTextColor(Color.DKGRAY);
-                        tv.setPadding(16, 8, 16, 8);
 
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                        );
-                        lp.setMargins(16, 8, 16, 8);
-                        tv.setLayoutParams(lp);
+                    // First: Fetch the Review to get the restaurantId
+                    reviewApi.getReviewById(reviewId).enqueue(new Callback<Review>() {
+                        @Override
+                        public void onResponse(Call<Review> call, Response<Review> reviewResponse) {
+                            if (reviewResponse.isSuccessful() && reviewResponse.body() != null) {
+                                String restaurantId = reviewResponse.body().getRestaurantId();
 
-                        repliesContainer.addView(tv);
-                    }
+                                // Then: Fetch the Restaurant name using the restaurantId
+                                restaurantService.getRestaurantById(restaurantId).enqueue(new Callback<Restaurant>() {
+                                    @Override
+                                    public void onResponse(Call<Restaurant> call, Response<Restaurant> restaurantResponse) {
+                                        if (restaurantResponse.isSuccessful() && restaurantResponse.body() != null) {
+                                            String restaurantName = restaurantResponse.body().getName();
+
+                                            for (Reply r : replies) {
+                                                TextView tv = new TextView(ReviewDetailActivity.this);
+                                                tv.setText(restaurantName + ": " + r.getComment());
+                                                tv.setTextSize(14);
+                                                tv.setTextColor(Color.DKGRAY);
+                                                tv.setPadding(16, 8, 16, 8);
+
+                                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                                        LinearLayout.LayoutParams.WRAP_CONTENT
+                                                );
+                                                lp.setMargins(16, 8, 16, 8);
+                                                tv.setLayoutParams(lp);
+
+                                                repliesContainer.addView(tv);
+                                            }
+                                        } else {
+                                            Toast.makeText(ReviewDetailActivity.this, "Failed to get restaurant name", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Restaurant> call, Throwable t) {
+                                        Toast.makeText(ReviewDetailActivity.this, "Error fetching restaurant: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } else {
+                                Toast.makeText(ReviewDetailActivity.this, "Failed to fetch review", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Review> call, Throwable t) {
+                            Toast.makeText(ReviewDetailActivity.this, "Error fetching review: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 } else {
                     Toast.makeText(ReviewDetailActivity.this, "Failed to load replies", Toast.LENGTH_SHORT).show();
                 }
@@ -177,7 +218,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
             String username = email.length() >= 3 ? email.substring(0,3) : email;
 
             // Create Reply object
-            Reply newReply = new Reply(email, username, comment);
+            Reply newReply = new Reply(review.getId(), email, username, comment);
 
             // Call backend
             replyApi.postReply(review.getId(), newReply).enqueue(new Callback<Reply>() {

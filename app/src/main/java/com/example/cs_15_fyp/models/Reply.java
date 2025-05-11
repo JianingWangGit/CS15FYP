@@ -6,11 +6,13 @@ import java.io.Serializable;
 public class Reply implements Serializable{
     @SerializedName("_id")
     private String id;
+    private String reviewId;
     private String email;
     private String username;
     private String comment;
 
-    public Reply(String email, String username, String comment) {
+    public Reply(String reviewId, String email, String username, String comment) {
+        this.reviewId = reviewId;
         this.email = email;
         this.username = username;
         this.comment = comment;
