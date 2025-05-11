@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activities.MyReviewsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.CreateRestaurantActivity"
             android:exported="false" />
         <activity

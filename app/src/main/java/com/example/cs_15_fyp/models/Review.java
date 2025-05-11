@@ -15,18 +15,20 @@ public class Review implements Serializable {
     private String comment;
     private float rating;
 
+    private String userId;
+
     private List<String> photos;
 
     private List<Reply> replies = new ArrayList<>();
 
-    public Review(String restaurantId, String username, String comment, float rating, List<String> photos) {
+    public Review(String restaurantId, String userId, String username, String comment, float rating, List<String> photos) {
         this.restaurantId = restaurantId;
+        this.userId = userId;
         this.username = username;
         this.comment = comment;
         this.rating = rating;
         this.photos = photos;
     }
-
 
     // Getters and Setters
     public String getId() {
@@ -57,6 +59,14 @@ public class Review implements Serializable {
 
     public void addReply(Reply reply) {
         this.replies.add(reply);
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
 

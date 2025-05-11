@@ -13,11 +13,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.activities.LoginActivity;
+import com.example.cs_15_fyp.activities.MyReviewsActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class UserProfileFragment extends Fragment {
 
     public UserProfileFragment() {
-        // Required empty public constructor
+        // Required empty constructor
     }
 
     @Nullable
@@ -25,7 +29,6 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         View reviewsSection = view.findViewById(R.id.reviewsSection);
@@ -33,20 +36,23 @@ public class UserProfileFragment extends Fragment {
         TextView logoutText = view.findViewById(R.id.logoutTextView);
 
         reviewsSection.setOnClickListener(v -> {
-            // Navigate to AllReviewsActivity
-            Intent intent = new Intent(getActivity(), com.example.cs_15_fyp.activities.AllReviewsActivity.class);
-            startActivity(intent);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                Intent intent = new Intent(getActivity(), MyReviewsActivity.class);
+                intent.putExtra("userId", user.getUid());
+                startActivity(intent);
+            } else {
+                Toast.makeText(getActivity(), "You must be logged in to view your reviews", Toast.LENGTH_SHORT).show();
+            }
         });
 
-        editEmailSection.setOnClickListener(v -> {
-            // Navigate to edit email/password screen
-            Toast.makeText(getActivity(), "Edit email/password clicked", Toast.LENGTH_SHORT).show();
-        });
+        editEmailSection.setOnClickListener(v ->
+                Toast.makeText(getActivity(), "Edit email/password clicked", Toast.LENGTH_SHORT).show()
+        );
 
-        // Logout click listener
         logoutText.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), com.example.cs_15_fyp.activities.LoginActivity.class);
-            startActivity(intent);
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         });
 

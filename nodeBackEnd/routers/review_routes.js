@@ -5,7 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
-const Review = require('../models/review_model'); // Import the Review model
+const Review = require('../models/review_model');
 const Restaurant = require('../models/restaurant_model');
 
 // GET all reviews
@@ -29,22 +29,39 @@ router.get('/', async (req, res) => {
 // POST a new review
 router.post('/', async (req, res) => {
     try {
-        const { restaurantId, username, comment, rating, photos } = req.body;
-        if (!restaurantId || !rating) {
-            return res.status(400).json({ success: false, error: "Restaurant ID and rating are required" });
+        const { restaurantId, userId, username, comment, rating, photos } = req.body;
+
+        // Validate required fields
+        if (!restaurantId || !rating || !userId) {
+            return res.status(400).json({
+                success: false,
+                error: "Missing required fields: restaurantId, userId, or rating"
+            });
         }
-        const newReview = new Review({ restaurantId, username, comment, rating, photos });
+
+        // Create and save the new review
+        const newReview = new Review({
+            restaurantId,
+            userId,
+            username,
+            comment,
+            rating,
+            photos
+        });
+
         await newReview.save();
 
+        // Update average rating for the restaurant
         const allReviews = await Review.find({ restaurantId });
         const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
+
         await Restaurant.findByIdAndUpdate(restaurantId, { rating: avg }, { new: true });
+
         res.status(201).json({ success: true, review: newReview });
     } catch (error) {
-        console.log(error);
+        console.error("Error submitting review:", error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
-
 
 module.exports = router;

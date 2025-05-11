@@ -8,26 +8,15 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.List;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
-import androidx.appcompat.widget.Toolbar;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import android.util.Base64;
-import android.util.Log;
 
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ImagePagerAdapter;
@@ -35,7 +24,17 @@ import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Review;
 import com.example.cs_15_fyp.utils.FirebaseStorageHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class GiveReviewActivity extends AppCompatActivity {
     private static final String TAG = "GiveReviewActivity";
@@ -66,7 +65,6 @@ public class GiveReviewActivity extends AppCompatActivity {
         }
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        // Initialize Firebase Storage
         FirebaseStorageHelper.initialize(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -75,7 +73,6 @@ public class GiveReviewActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Connect views
         ratingBar = findViewById(R.id.ratingBar);
         ratingDisplay = findViewById(R.id.ratingDisplay);
         editTextReview = findViewById(R.id.editTextReview);
@@ -84,19 +81,14 @@ public class GiveReviewActivity extends AppCompatActivity {
         photoCount = findViewById(R.id.photoCount);
         btnUploadPhotos = findViewById(R.id.btnUploadPhotos);
 
-        // Rating change listener
         ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
             ratingDisplay.setText("Your rating: " + rating + " ⭐");
         });
 
-        // Retrofit init
         Retrofit retrofit = ApiClient.getClient();
         reviewApi = retrofit.create(ReviewApi.class);
 
-        // Submit button
         btnSubmitReview.setOnClickListener(v -> submitReview());
-
-        // Upload button
         btnUploadPhotos.setOnClickListener(v -> openImagePicker());
 
         imagePagerAdapter = new ImagePagerAdapter(this, imageUris, () -> {
@@ -104,7 +96,6 @@ public class GiveReviewActivity extends AppCompatActivity {
         });
         viewPagerPhotos.setAdapter(imagePagerAdapter);
 
-        // Modern activity result launcher
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -125,7 +116,7 @@ public class GiveReviewActivity extends AppCompatActivity {
                             }
                         }
                         photoCount.setText(imageUris.size() + " photos");
-                        imagePagerAdapter.notifyDataSetChanged(); // 👈 refresh ViewPager
+                        imagePagerAdapter.notifyDataSetChanged();
                     }
                 }
         );
@@ -147,45 +138,61 @@ public class GiveReviewActivity extends AppCompatActivity {
             return;
         }
 
-        // Get restaurantId from intent
         String restaurantId = getIntent().getStringExtra("restaurantId");
         if (restaurantId == null || restaurantId.isEmpty()) {
             Toast.makeText(this, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
             return;
         }
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this, "You must be logged in to submit a review", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = user.getUid();
+
         if (imageUris.isEmpty()) {
-            // No images to upload, submit review directly
-            submitReviewToApi(restaurantId, comment, rating, new ArrayList<>());
+            fetchUsernameAndSubmit(restaurantId, userId, comment, rating, new ArrayList<>());
         } else {
-            // Show upload in progress
             btnSubmitReview.setEnabled(false);
             Toast.makeText(this, "Uploading your photos, please wait...", Toast.LENGTH_SHORT).show();
-            
-            // Upload images to Firebase Storage
+
             FirebaseStorageHelper.uploadReviewImages(imageUris)
-                .thenAccept(downloadUrls -> {
-                    // Images uploaded successfully, submit review with image URLs
-                    runOnUiThread(() -> {
-                        submitReviewToApi(restaurantId, comment, rating, downloadUrls);
+                    .thenAccept(downloadUrls -> runOnUiThread(() ->
+                            fetchUsernameAndSubmit(restaurantId, userId, comment, rating, downloadUrls)))
+                    .exceptionally(e -> {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this,
+                                    "Upload failed. Please check your internet connection and try again.",
+                                    Toast.LENGTH_LONG).show();
+                            btnSubmitReview.setEnabled(true);
+                        });
+                        return null;
                     });
-                })
-                .exceptionally(e -> {
-                    // Handle upload failure
-                    runOnUiThread(() -> {
-                        Toast.makeText(GiveReviewActivity.this, 
-                            "Upload failed. Please check your internet connection and try again.", Toast.LENGTH_LONG).show();
-                        btnSubmitReview.setEnabled(true);
-                    });
-                    return null;
-                });
         }
     }
 
-    private void submitReviewToApi(String restaurantId, String comment, float rating, List<String> photoUrls) {
-        // Submit Review with restaurantId
-        Review review = new Review(restaurantId, "user123", comment, rating, photoUrls);
+    private void fetchUsernameAndSubmit(String restaurantId, String userId, String comment, float rating, List<String> photoUrls) {
+        FirebaseFirestore.getInstance().collection("Users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(snapshot -> {
+                    String username = snapshot.getString("username");
+                    if (username == null || username.isEmpty()) {
+                        username = "anonymous";
+                    }
 
+                    Review review = new Review(restaurantId, userId, username, comment, rating, photoUrls);
+                    submitReviewObject(review);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to fetch user info", Toast.LENGTH_SHORT).show();
+                    btnSubmitReview.setEnabled(true);
+                });
+    }
+
+    private void submitReviewObject(Review review) {
         reviewApi.submitReview(review).enqueue(new Callback<Review>() {
             @Override
             public void onResponse(Call<Review> call, Response<Review> response) {
