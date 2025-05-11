@@ -103,7 +103,7 @@
             android:padding="16dp"
             android:visibility="gone">
 
-            <!-- Add more views here if needed -->
+            <!-- Edit restaurant -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,11 +112,14 @@
                 app:cardCornerRadius="12dp">
 
                 <LinearLayout
+                    android:id="@+id/editRestaurantSection"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="18dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:focusable="true">
 
                     <TextView
                         android:layout_width="0dp"
@@ -132,6 +135,16 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- View Reviews Button -->
+            <Button
+                android:id="@+id/view_restaurant_reviews_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="View Restaurant Reviews"
+                android:backgroundTint="#4CAF50"
+                android:textColor="@android:color/white"
+                android:padding="12dp" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

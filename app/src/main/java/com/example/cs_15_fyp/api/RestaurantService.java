@@ -26,10 +26,11 @@ public interface RestaurantService {
     @GET("/restaurants/{id}")
     Call<Restaurant> getRestaurantById(@Path("id") String restaurantId);
 
-    @GET("restaurants/business/{uid}")
-    Call<ApiResponse<List<Restaurant>>> getRestaurantsByBusinessId(@Path("uid") String businessUid);
-
     @POST("restaurants")
     Call<ApiResponse<Restaurant>> createRestaurant(@Body Restaurant restaurant);
+
+    @GET("/restaurants/business/{uid}")
+    Call<ApiResponse<List<Restaurant>>> getRestaurantsByBusinessId(@Path("uid") String uid);
+
 
 } 

@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.cs_15_fyp.R;
+import com.example.cs_15_fyp.activities.AllReviewsActivity;
 import com.example.cs_15_fyp.activities.CreateRestaurantActivity;
 import com.example.cs_15_fyp.activities.LoginActivity;
 import com.example.cs_15_fyp.api.ApiClient;
@@ -38,6 +39,7 @@ public class BusinessProfileFragment extends Fragment {
     private LinearLayout businessContent, emptyRestaurantSection;
     private TextView businessNameView;
     private Button createRestaurantButton;
+    private Restaurant myRestaurant;
 
     @Nullable
     @Override
@@ -47,14 +49,14 @@ public class BusinessProfileFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_business_profile, container, false);
 
-        // Views
+        // View bindings
         TextView logoutButton = view.findViewById(R.id.logout_button);
         businessContent = view.findViewById(R.id.business_content);
         emptyRestaurantSection = view.findViewById(R.id.empty_restaurant_section);
         createRestaurantButton = view.findViewById(R.id.create_restaurant_button);
         businessNameView = view.findViewById(R.id.business_name);
 
-        // Logout
+        // Logout handler
         logoutButton.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -63,12 +65,39 @@ public class BusinessProfileFragment extends Fragment {
             if (getActivity() != null) getActivity().finish();
         });
 
-        // Create button — use startActivityForResult to refresh later
+        // Create Restaurant
         createRestaurantButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), CreateRestaurantActivity.class);
             startActivityForResult(intent, REQUEST_CREATE_RESTAURANT);
         });
 
+        // Edit Restaurant Info
+        LinearLayout editRestaurantSection = view.findViewById(R.id.editRestaurantSection);
+        editRestaurantSection.setOnClickListener(v -> {
+            if (myRestaurant != null) {
+                Toast.makeText(getActivity(), "Edit restaurant logic goes here", Toast.LENGTH_SHORT).show();
+                // Intent intent = new Intent(getActivity(), EditRestaurantActivity.class);
+                // intent.putExtra("restaurantId", myRestaurant.getId());
+                // startActivity(intent);
+            } else {
+                Toast.makeText(getActivity(), "Restaurant not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // View Restaurant Reviews
+        Button viewReviewsButton = view.findViewById(R.id.view_restaurant_reviews_button);
+        viewReviewsButton.setOnClickListener(v -> {
+            if (myRestaurant != null) {
+                Intent intent = new Intent(getActivity(), AllReviewsActivity.class);
+                intent.putExtra("restaurantId", myRestaurant.getId());
+                intent.putExtra("restaurantName", myRestaurant.getName());
+                startActivity(intent);
+            } else {
+                Toast.makeText(getActivity(), "Restaurant not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Load associated restaurant
         fetchBusinessRestaurant();
 
         return view;
@@ -90,7 +119,7 @@ public class BusinessProfileFragment extends Fragment {
                     if (restaurants.isEmpty()) {
                         showNoRestaurantUI();
                     } else {
-                        Restaurant myRestaurant = restaurants.get(0); // Assume single
+                        myRestaurant = restaurants.get(0);  // Assuming one restaurant per business
                         businessNameView.setText(myRestaurant.getName());
                         showBusinessUI();
                     }
@@ -117,12 +146,11 @@ public class BusinessProfileFragment extends Fragment {
         businessContent.setVisibility(View.VISIBLE);
     }
 
-    // ✅ Refresh after returning from CreateRestaurantActivity
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CREATE_RESTAURANT && resultCode == Activity.RESULT_OK) {
-            fetchBusinessRestaurant(); // Refresh restaurant data
+            fetchBusinessRestaurant(); // Refresh data after creating a restaurant
         }
     }
 }
