@@ -93,9 +93,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
             priceRange.setText(getPriceRangeText(restaurant.getPriceRange()));
             cuisineType.setText(restaurant.getCuisine());
             address.setText(restaurant.getAddress());
-            openStatus.setText(restaurant.isOpen() ? "Open" : "Closed");
+            
+            // Update open status with hours
+            boolean isOpen = restaurant.isOpen();
+            openStatus.setText(isOpen ? "Open Now" : "Closed");
             openStatus.setTextColor(itemView.getContext().getResources().getColor(
-                    restaurant.isOpen() ? android.R.color.holo_green_dark : android.R.color.holo_red_dark
+                    isOpen ? android.R.color.holo_green_dark : android.R.color.holo_red_dark
             ));
 
             // Load image from URL using Glide
