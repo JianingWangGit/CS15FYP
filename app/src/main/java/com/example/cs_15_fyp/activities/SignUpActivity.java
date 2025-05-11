@@ -142,20 +142,21 @@ public class SignUpActivity extends AppCompatActivity {
                                     Toast.makeText(SignUpActivity.this, "Sign up Successful", Toast.LENGTH_SHORT).show();
 
                                     FirebaseUser fuser = auth.getCurrentUser();
-                                    DocumentReference df   = fstore.collection("Users").document(fuser.getUid());
-                                    Map<String,Object> userInfo = new HashMap<>();
+                                    DocumentReference df = fstore.collection("Users").document(fuser.getUid());
+                                    Map<String, Object> userInfo = new HashMap<>();
                                     userInfo.put("Email", signupEmail.getText().toString().trim());
-                                    userInfo.put("Personal", usertypeSpinner.getSelectedItemPosition());
+                                    // Store userType as 'business' or 'user'
+                                    String userType = usertypeSpinner.getSelectedItemPosition() == 2 ? "business" : "user";
+                                    userInfo.put("userType", userType);
                                     df.set(userInfo);
 
-                                    startActivity(new Intent(String.valueOf(SignUpActivity.this))); //TODO :remove after merge
-                                    //startActivity(new Intent(SignUpActivity.this, RestaurantSearchActivity.class));
+                                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                                     finish();
                                 } else {
                                     Exception e = task.getException();
                                     if (e != null && e.getMessage() != null && e.getMessage().contains("The email address is already in use")) {
                                         Toast.makeText(SignUpActivity.this, "This email is already registered. Please log in.", Toast.LENGTH_LONG).show();
-                                    }else{
+                                    } else {
                                         Toast.makeText(SignUpActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                     e.printStackTrace();  // Print full exception in Logcat
