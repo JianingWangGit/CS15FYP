@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -15,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
@@ -111,6 +114,19 @@ public class InfoRestaurantActivity extends AppCompatActivity {
                     for (Restaurant r : response.body().getData()) {
                         if (r.getId().equals(restaurantId)) {
                             ratingNumberText.setText(String.format("%.1f", r.getRating()));
+                            
+                            // Load restaurant image
+                            ImageView restaurantImage = findViewById(R.id.restaurantImage);
+                            if (r.getImageUrl() != null && !r.getImageUrl().isEmpty()) {
+                                Glide.with(InfoRestaurantActivity.this)
+                                    .load(r.getImageUrl())
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .placeholder(R.drawable.placeholder_restaurant)
+                                    .error(R.drawable.placeholder_restaurant)
+                                    .into(restaurantImage);
+                            } else {
+                                restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
+                            }
                             break;
                         }
                     }
