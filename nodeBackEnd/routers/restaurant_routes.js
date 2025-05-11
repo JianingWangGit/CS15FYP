@@ -10,11 +10,11 @@ async function updateRestaurantRating(restaurantId) {
         console.log('Updating rating for restaurant:', restaurantId);
         const allReviews = await Review.find({ restaurantId: new mongoose.Types.ObjectId(restaurantId) });
         console.log('Found reviews:', allReviews.length);
-        
+
         if (allReviews.length > 0) {
             const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
             console.log('Calculated average rating:', avg);
-            
+
             const updatedRestaurant = await Restaurant.findByIdAndUpdate(
                 restaurantId,
                 { rating: avg },
@@ -29,32 +29,10 @@ async function updateRestaurantRating(restaurantId) {
     }
 }
 
-// Helper function to update all restaurant ratings
-async function updateAllRestaurantRatings() {
-    try {
-        console.log('Starting to update all restaurant ratings');
-        const restaurants = await Restaurant.find();
-        console.log('Found restaurants to update:', restaurants.length);
-        
-        for (const restaurant of restaurants) {
-            try {
-                await updateRestaurantRating(restaurant._id);
-            } catch (error) {
-                console.error(`Error updating rating for restaurant ${restaurant._id}:`, error);
-            }
-        }
-        console.log('Finished updating all restaurant ratings');
-    } catch (error) {
-        console.error('Error updating all restaurant ratings:', error);
-        throw error;
-    }
-}
-
 // GET all restaurants
 router.get('/', async (req, res) => {
     try {
         console.log('GET / - Updating all restaurant ratings');
-        await updateAllRestaurantRatings();
         const restaurants = await Restaurant.find();
         console.log('Returning restaurants:', restaurants.length);
         res.status(200).json({ success: true, data: restaurants });
@@ -68,7 +46,6 @@ router.get('/', async (req, res) => {
 router.get('/cuisine/:cuisine', async (req, res) => {
     try {
         console.log('GET /cuisine/:cuisine - Updating all restaurant ratings');
-        await updateAllRestaurantRatings();
         const restaurants = await Restaurant.find({ cuisine: req.params.cuisine });
         console.log('Returning restaurants by cuisine:', restaurants.length);
         res.status(200).json({ success: true, data: restaurants });
@@ -82,7 +59,6 @@ router.get('/cuisine/:cuisine', async (req, res) => {
 router.get('/price/:priceRange', async (req, res) => {
     try {
         console.log('GET /price/:priceRange - Updating all restaurant ratings');
-        await updateAllRestaurantRatings();
         const restaurants = await Restaurant.find({ priceRange: parseInt(req.params.priceRange) });
         console.log('Returning restaurants by price range:', restaurants.length);
         res.status(200).json({ success: true, data: restaurants });
@@ -97,7 +73,6 @@ router.get('/search', async (req, res) => {
     try {
         const { query } = req.query;
         console.log('GET /search - Updating all restaurant ratings');
-        await updateAllRestaurantRatings();
         const restaurants = await Restaurant.find({
             $or: [
                 { name: { $regex: query, $options: 'i' } },
@@ -113,4 +88,4 @@ router.get('/search', async (req, res) => {
     }
 });
 
-module.exports = router; 
+module.exports = router;

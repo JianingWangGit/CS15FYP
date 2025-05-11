@@ -36,8 +36,6 @@ import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Review;
 import com.example.cs_15_fyp.utils.FirebaseStorageHelper;
 
-import java.io.InputStream;
-
 
 public class GiveReviewActivity extends AppCompatActivity {
     private static final String TAG = "GiveReviewActivity";
