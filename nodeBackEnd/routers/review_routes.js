@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
 
         const allReviews = await Review.find({ restaurantId });
         const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
-        await Restaurant.findByIdAndUpdate(restaurantId, { rating: avg });
+        await Restaurant.findByIdAndUpdate(restaurantId, { rating: avg }, { new: true });
         res.status(201).json({ success: true, review: newReview });
     } catch (error) {
         console.log(error);

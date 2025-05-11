@@ -67,7 +67,6 @@ public class InfoRestaurantActivity extends AppCompatActivity {
         // UI Elements
         Button btnGoToGiveReview = findViewById(R.id.btnGoToGiveReview);
         Button btnSeeAllReviews = findViewById(R.id.btnSeeAllReviews);
-        EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
         ratingNumberText = findViewById(R.id.ratingNumber);
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
@@ -88,7 +87,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
 
         if (restaurantNameText == null) restaurantNameText = "Restaurant Info";
         restaurantName.setText(restaurantNameText);
-        getSupportActionBar().setTitle(restaurantNameText); // dynamic title
+        getSupportActionBar().setTitle(restaurantNameText);
 
         btnGoToGiveReview.setOnClickListener(v -> {
             Intent intent = new Intent(this, GiveReviewActivity.class);
@@ -116,16 +115,15 @@ public class InfoRestaurantActivity extends AppCompatActivity {
                     for (Restaurant r : response.body().getData()) {
                         if (r.getId().equals(restaurantId)) {
                             ratingNumberText.setText(String.format("%.1f", r.getRating()));
-                            
-                            // Load restaurant image
+
                             ImageView restaurantImage = findViewById(R.id.restaurantImage);
                             if (r.getImageUrl() != null && !r.getImageUrl().isEmpty()) {
                                 Glide.with(InfoRestaurantActivity.this)
-                                    .load(r.getImageUrl())
-                                    .transition(DrawableTransitionOptions.withCrossFade())
-                                    .placeholder(R.drawable.placeholder_restaurant)
-                                    .error(R.drawable.placeholder_restaurant)
-                                    .into(restaurantImage);
+                                        .load(r.getImageUrl())
+                                        .transition(DrawableTransitionOptions.withCrossFade())
+                                        .placeholder(R.drawable.placeholder_restaurant)
+                                        .error(R.drawable.placeholder_restaurant)
+                                        .into(restaurantImage);
                             } else {
                                 restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
                             }
