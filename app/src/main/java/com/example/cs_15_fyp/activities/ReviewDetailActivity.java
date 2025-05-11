@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.cs_15_fyp.R;
@@ -27,7 +27,8 @@ import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Reply;
 import com.example.cs_15_fyp.models.Restaurant;
 import com.example.cs_15_fyp.models.Review;
-import androidx.appcompat.widget.Toolbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Collections;
 import java.util.List;
@@ -35,9 +36,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class ReviewDetailActivity extends AppCompatActivity {
 
@@ -83,12 +81,10 @@ public class ReviewDetailActivity extends AppCompatActivity {
         // Retrieve Review
         review = (Review) getIntent().getSerializableExtra("review");
         if (review != null) {
-            // Populate review details
             usernameText.setText(review.getUsername());
             commentText.setText(review.getComment());
             ratingBar.setRating(review.getRating());
 
-            // Photos
             List<String> photos = review.getPhotos();
             if (photos != null && !photos.isEmpty()) {
                 photoCountText.setText(photos.size() + " photos");
@@ -108,25 +104,50 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 imagePager.setVisibility(View.GONE);
             }
 
-            // Display existing replies
             loadReplies();
         }
 
         Button btnReply = findViewById(R.id.btnReply);
-        btnReply.setOnClickListener(v -> showReplyDialog());
+        btnReply.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null) {
+                Toast.makeText(this, "You must be logged in to reply", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String currentUserId = user.getUid();
+
+            restaurantService.getRestaurantById(review.getRestaurantId()).enqueue(new Callback<Restaurant>() {
+                @Override
+                public void onResponse(Call<Restaurant> call, Response<Restaurant> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        String businessUserId = response.body().getBusinessUserId();
+                        if (currentUserId.equals(businessUserId)) {
+                            showReplyDialog();
+                        } else {
+                            Toast.makeText(ReviewDetailActivity.this, "Only the business owner can reply", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(ReviewDetailActivity.this, "Failed to verify restaurant ownership", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Restaurant> call, Throwable t) {
+                    Toast.makeText(ReviewDetailActivity.this, "Error verifying ownership", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     private void loadReplies() {
         String restaurantId = review.getRestaurantId();
-
-        // Step 1: Fetch the restaurant
         restaurantService.getRestaurantById(restaurantId).enqueue(new Callback<Restaurant>() {
             @Override
             public void onResponse(Call<Restaurant> call, Response<Restaurant> restaurantResponse) {
                 if (restaurantResponse.isSuccessful() && restaurantResponse.body() != null) {
                     String restaurantName = restaurantResponse.body().getName();
 
-                    // Step 2: Fetch the replies
                     replyApi.getReplies(review.getId()).enqueue(new Callback<List<Reply>>() {
                         @Override
                         public void onResponse(Call<List<Reply>> call, Response<List<Reply>> replyResponse) {
@@ -141,14 +162,12 @@ public class ReviewDetailActivity extends AppCompatActivity {
                                     tv.setTextSize(14);
                                     tv.setTextColor(Color.DKGRAY);
                                     tv.setPadding(16, 8, 16, 8);
-
                                     LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                                             LinearLayout.LayoutParams.MATCH_PARENT,
                                             LinearLayout.LayoutParams.WRAP_CONTENT
                                     );
                                     lp.setMargins(16, 8, 16, 8);
                                     tv.setLayoutParams(lp);
-
                                     repliesContainer.addView(tv);
                                 }
                             } else {
@@ -161,7 +180,6 @@ public class ReviewDetailActivity extends AppCompatActivity {
                             Toast.makeText(ReviewDetailActivity.this, "Error loading replies: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 } else {
                     Toast.makeText(ReviewDetailActivity.this, "Failed to get restaurant", Toast.LENGTH_SHORT).show();
                 }
@@ -174,8 +192,6 @@ public class ReviewDetailActivity extends AppCompatActivity {
         });
     }
 
-
-
     private void showReplyDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Reply to Review");
@@ -183,7 +199,6 @@ public class ReviewDetailActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(32, 24, 32, 8);
-
 
         final EditText inputComment = new EditText(this);
         inputComment.setHint("Type your reply here...");
@@ -201,18 +216,15 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String email = user.getEmail();
-            // take first 3 letters (or entire string if shorter)
-            String username = email.length() >= 3 ? email.substring(0,3) : email;
+            String username = email.length() >= 3 ? email.substring(0, 3) : email;
 
-            // Create Reply object
             Reply newReply = new Reply(review.getId(), email, username, comment);
 
-            // Call backend
             replyApi.postReply(review.getId(), newReply).enqueue(new Callback<Reply>() {
                 @Override
                 public void onResponse(Call<Reply> call, Response<Reply> response) {
                     if (response.isSuccessful()) {
-                        loadReplies();    // reload replies using the original review id
+                        loadReplies();
                         Toast.makeText(ReviewDetailActivity.this, "Reply added", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(ReviewDetailActivity.this, "Failed to add reply", Toast.LENGTH_SHORT).show();
