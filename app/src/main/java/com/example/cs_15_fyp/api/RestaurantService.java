@@ -5,6 +5,7 @@ import com.example.cs_15_fyp.models.Restaurant;
 import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RestaurantService {
@@ -19,4 +20,7 @@ public interface RestaurantService {
 
     @GET("restaurants/price")
     Call<ApiResponse<List<Restaurant>>> getRestaurantsByPrice(@Query("priceRange") int priceRange);
+
+    @GET("/restaurants/{id}")
+    Call<Restaurant> getRestaurantById(@Path("id") String restaurantId);
 } 

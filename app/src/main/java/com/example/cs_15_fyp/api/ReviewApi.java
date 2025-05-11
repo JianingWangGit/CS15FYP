@@ -26,5 +26,7 @@ public interface ReviewApi {
     @POST("/reviews")
     Call<Review> submitReview(@Body Review review);
 
+    @GET("/reviews/{id}")
+    Call<Review> getReviewById(@Path("id") String reviewId);
 }
 
