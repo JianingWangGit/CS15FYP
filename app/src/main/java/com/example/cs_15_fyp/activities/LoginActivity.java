@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
-        TextView signupText = findViewById(R.id.signup_text);
+        /*TextView signupText = findViewById(R.id.signup_text);
         SpannableString ss = new SpannableString("Don't have an account? Sign up");
 
         ClickableSpan clickableSpan = new ClickableSpan() {
@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
         ss.setSpan(new StyleSpan(Typeface.BOLD), 23, 30, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // Bold
 
         signupText.setText(ss);
-        signupText.setMovementMethod(LinkMovementMethod.getInstance());
+        signupText.setMovementMethod(LinkMovementMethod.getInstance());*/
 
     }
 

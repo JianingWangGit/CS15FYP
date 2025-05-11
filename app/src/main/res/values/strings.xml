@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">CS-15-FYP</string>
-    <string name="default_web_client_id">53159982214-7rn330i86noju5jb5uc57mlkd9e5v966.apps.googleusercontent.com</string>
+    <string name="default_web_client_id">53159982214-3ifum35d48j0ikjmkjfihbdi15cq88ei.apps.googleusercontent.com
+ </string>
 
     <string-array name="user_type">
         <item> User Type </item>
         <item> Personal </item>
         <item> Business </item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
