@@ -99,7 +99,7 @@ public class PersonalSignupActivity extends AppCompatActivity {
                                             .document(fuser.getUid())
                                             .set(userData)
                                             .addOnSuccessListener(aVoid -> {
-                                                startActivity(new Intent(String.valueOf(PersonalSignupActivity.this))); //TODO :remove after merge
+                                                 startActivity(new Intent(PersonalSignupActivity.this, MainActivity.class)); //TODO :remove after merge
                                             });
                                     Toast.makeText(PersonalSignupActivity.this, "Sign up Successful", Toast.LENGTH_SHORT).show();
 
