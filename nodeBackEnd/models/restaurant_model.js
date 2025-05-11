@@ -28,10 +28,13 @@ const restaurantSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isOpen: {
-        type: Boolean,
-        required: true,
-        default: true
+    hours: {
+        type: Map,
+        of: {
+            open: String,
+            close: String
+        },
+        required: true
     },
     priceRange: {
         type: Number,
