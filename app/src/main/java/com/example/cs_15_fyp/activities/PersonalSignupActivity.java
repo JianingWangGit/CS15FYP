@@ -2,6 +2,7 @@ package com.example.cs_15_fyp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ public class PersonalSignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         setContentView(R.layout.activity_personal_signup);
 
         auth = FirebaseAuth.getInstance();
@@ -80,38 +82,37 @@ public class PersonalSignupActivity extends AppCompatActivity {
                     signupPassword.setError("Password must include a special character (e.g. @, #, !)");
                     return;
                 } else {
-                    auth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(PersonalSignupActivity.this, "Sign up Successful", Toast.LENGTH_SHORT).show();
 
-                                FirebaseUser fuser = auth.getCurrentUser();
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                Map<String, Object> userInfo = new HashMap<>();
-                                //userInfo.put("createdAt", FieldValue.serverTimestamp());
-                                userInfo.put("Email", signupEmail.getText().toString().trim());
-                                userInfo.put("UserType", "Personal");
-                                userInfo.put("Username", generaterandomUser());
-                                userInfo.put("UserID", fuser.getUid());
+                    auth.createUserWithEmailAndPassword(user,pass)
+                            .addOnCompleteListener(task ->{
+                                if (task.isSuccessful()){
+                                    FirebaseUser fuser = auth.getCurrentUser();
 
-                                /*db.collection("users").document(fuser.getUid())
-                                        .set(userInfo);*/
-                                db.collection("Users").add(fuser.getUid());
+                                    Map<String, Object> userData = new HashMap<>();
+                                    userData.put("Email", signupEmail.getText().toString().trim());
+                                    userData.put("UserType", "Personal");
+                                    userData.put("createdAt", FieldValue.serverTimestamp());
+                                    userData.put("Username", generaterandomUser());
+                                    userData.put("userId", fuser.getUid());
 
-                                startActivity(new Intent(String.valueOf(PersonalSignupActivity.this))); //TODO :remove after merge
-                                //startActivity(new Intent(SignUpActivity.this, RestaurantSearchActivity.class));
-                                finish();
+                                    db.collection("Users")
+                                            .document(fuser.getUid())
+                                            .set(userData)
+                                            .addOnSuccessListener(aVoid -> {
+                                                startActivity(new Intent(String.valueOf(PersonalSignupActivity.this))); //TODO :remove after merge
+                                            });
+                                    Toast.makeText(PersonalSignupActivity.this, "Sign up Successful", Toast.LENGTH_SHORT).show();
+
                             } else {
-                                Exception e = task.getException();
-                                if (e != null && e.getMessage() != null && e.getMessage().contains("The email address is already in use")) {
-                                    Toast.makeText(PersonalSignupActivity.this, "This email is already registered. Please log in.", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(PersonalSignupActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                                e.printStackTrace();  // Print full exception in Logcat
-                            }
-                        }
+                                        Exception e = task.getException();
+                                        if (e != null && e.getMessage() != null && e.getMessage().contains("The email address is already in use")) {
+                                            Toast.makeText(PersonalSignupActivity.this, "This email is already registered. Please log in.", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Toast.makeText(PersonalSignupActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                        e.printStackTrace();  // Print full exception in Logcat
+                                    }
+
                     });
                 }
             }
