@@ -32,4 +32,8 @@ public class ApiClient {
         return getClient().create(RestaurantService.class);
     }
 
+    public static ReplyApi getReplyApi() {
+        return getClient().create(ReplyApi.class);
+    }
+
 }
