@@ -21,7 +21,9 @@ app.get('/', (req, res) => {
 
 const reviewRoutes = require('./routers/review_routes');
 const restaurantRoutes = require('./routers/restaurant_routes');
+const responseRoutes = require('./routers/response_routes');
 
+app.use('/responses', responseRoutes);
 app.use('/reviews', reviewRoutes);
 app.use('/restaurants', restaurantRoutes);
 
