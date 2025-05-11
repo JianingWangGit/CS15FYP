@@ -123,14 +123,13 @@ import java.util.Random;
                                     db.collection("users").document(fuser.getUid())
                                             .set(userInfo);
 
-                                    startActivity(new Intent(String.valueOf(SignUpActivity.this))); //TODO :remove after merge
-                                    //startActivity(new Intent(SignUpActivity.this, RestaurantSearchActivity.class));
+                                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                                     finish();
                                 } else {
                                     Exception e = task.getException();
                                     if (e != null && e.getMessage() != null && e.getMessage().contains("The email address is already in use")) {
                                         Toast.makeText(SignUpActivity.this, "This email is already registered. Please log in.", Toast.LENGTH_LONG).show();
-                                    }else{
+                                    } else {
                                         Toast.makeText(SignUpActivity.this, "Sign up Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                     e.printStackTrace();  // Print full exception in Logcat

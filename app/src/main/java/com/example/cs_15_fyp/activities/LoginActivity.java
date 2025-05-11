@@ -34,6 +34,8 @@ import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -71,8 +73,23 @@ public class LoginActivity extends AppCompatActivity {
                     auth.signInWithEmailAndPassword(email, password)
                             .addOnSuccessListener(authResult -> {
                                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
+                                FirebaseUser user = auth.getCurrentUser();
+                                if (user != null) {
+                                    FirebaseFirestore.getInstance().collection("Users")
+                                        .document(user.getUid())
+                                        .get()
+                                        .addOnSuccessListener(documentSnapshot -> {
+                                            String userType = documentSnapshot.getString("userType");
+                                            if (userType == null) userType = "user";
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            intent.putExtra("userType", userType);
+                                            startActivity(intent);
+                                            finish();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(LoginActivity.this, "Failed to get user type", Toast.LENGTH_SHORT).show();
+                                        });
+                                }
                             })
                             .addOnFailureListener(e ->
                                     Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show());
@@ -148,5 +165,10 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Google Login Failed", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private boolean isBusinessAccount(String email) {
+        // Example: check for business email domain or use your own logic
+        return email.endsWith("@business.com");
     }
 }
