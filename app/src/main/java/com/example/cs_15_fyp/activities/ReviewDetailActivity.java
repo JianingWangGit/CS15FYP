@@ -29,6 +29,7 @@ import com.example.cs_15_fyp.models.Restaurant;
 import com.example.cs_15_fyp.models.Review;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -108,81 +109,67 @@ public class ReviewDetailActivity extends AppCompatActivity {
             }
 
             // Display existing replies
-            loadReplies(review.getId());
+            loadReplies();
         }
 
         Button btnReply = findViewById(R.id.btnReply);
         btnReply.setOnClickListener(v -> showReplyDialog());
     }
 
-    private void loadReplies(String reviewId) {
-        replyApi.getReplies(reviewId).enqueue(new Callback<List<Reply>>() {
+    private void loadReplies() {
+        String restaurantId = review.getRestaurantId();
+
+        // Step 1: Fetch the restaurant
+        restaurantService.getRestaurantById(restaurantId).enqueue(new Callback<Restaurant>() {
             @Override
-            public void onResponse(Call<List<Reply>> call, Response<List<Reply>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Reply> replies = response.body();
-                    repliesContainer.removeAllViews();
+            public void onResponse(Call<Restaurant> call, Response<Restaurant> restaurantResponse) {
+                if (restaurantResponse.isSuccessful() && restaurantResponse.body() != null) {
+                    String restaurantName = restaurantResponse.body().getName();
 
-                    // First: Fetch the Review to get the restaurantId
-                    reviewApi.getReviewById(reviewId).enqueue(new Callback<Review>() {
+                    // Step 2: Fetch the replies
+                    replyApi.getReplies(review.getId()).enqueue(new Callback<List<Reply>>() {
                         @Override
-                        public void onResponse(Call<Review> call, Response<Review> reviewResponse) {
-                            if (reviewResponse.isSuccessful() && reviewResponse.body() != null) {
-                                String restaurantId = reviewResponse.body().getRestaurantId();
+                        public void onResponse(Call<List<Reply>> call, Response<List<Reply>> replyResponse) {
+                            if (replyResponse.isSuccessful() && replyResponse.body() != null) {
+                                List<Reply> replies = replyResponse.body();
+                                Collections.reverse(replies);
+                                repliesContainer.removeAllViews();
 
-                                // Then: Fetch the Restaurant name using the restaurantId
-                                restaurantService.getRestaurantById(restaurantId).enqueue(new Callback<Restaurant>() {
-                                    @Override
-                                    public void onResponse(Call<Restaurant> call, Response<Restaurant> restaurantResponse) {
-                                        if (restaurantResponse.isSuccessful() && restaurantResponse.body() != null) {
-                                            String restaurantName = restaurantResponse.body().getName();
+                                for (Reply r : replies) {
+                                    TextView tv = new TextView(ReviewDetailActivity.this);
+                                    tv.setText(restaurantName + ": " + r.getComment());
+                                    tv.setTextSize(14);
+                                    tv.setTextColor(Color.DKGRAY);
+                                    tv.setPadding(16, 8, 16, 8);
 
-                                            for (Reply r : replies) {
-                                                TextView tv = new TextView(ReviewDetailActivity.this);
-                                                tv.setText(restaurantName + ": " + r.getComment());
-                                                tv.setTextSize(14);
-                                                tv.setTextColor(Color.DKGRAY);
-                                                tv.setPadding(16, 8, 16, 8);
+                                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                            LinearLayout.LayoutParams.MATCH_PARENT,
+                                            LinearLayout.LayoutParams.WRAP_CONTENT
+                                    );
+                                    lp.setMargins(16, 8, 16, 8);
+                                    tv.setLayoutParams(lp);
 
-                                                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                                        LinearLayout.LayoutParams.MATCH_PARENT,
-                                                        LinearLayout.LayoutParams.WRAP_CONTENT
-                                                );
-                                                lp.setMargins(16, 8, 16, 8);
-                                                tv.setLayoutParams(lp);
-
-                                                repliesContainer.addView(tv);
-                                            }
-                                        } else {
-                                            Toast.makeText(ReviewDetailActivity.this, "Failed to get restaurant name", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<Restaurant> call, Throwable t) {
-                                        Toast.makeText(ReviewDetailActivity.this, "Error fetching restaurant: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
+                                    repliesContainer.addView(tv);
+                                }
                             } else {
-                                Toast.makeText(ReviewDetailActivity.this, "Failed to fetch review", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReviewDetailActivity.this, "Failed to load replies", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Review> call, Throwable t) {
-                            Toast.makeText(ReviewDetailActivity.this, "Error fetching review: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                        public void onFailure(Call<List<Reply>> call, Throwable t) {
+                            Toast.makeText(ReviewDetailActivity.this, "Error loading replies: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
                 } else {
-                    Toast.makeText(ReviewDetailActivity.this, "Failed to load replies", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReviewDetailActivity.this, "Failed to get restaurant", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Reply>> call, Throwable t) {
-                Toast.makeText(ReviewDetailActivity.this, "Error loading replies: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Restaurant> call, Throwable t) {
+                Toast.makeText(ReviewDetailActivity.this, "Error fetching restaurant: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -225,7 +212,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Reply> call, Response<Reply> response) {
                     if (response.isSuccessful()) {
-                        loadReplies(review.getId());    // reload replies using the original review id
+                        loadReplies();    // reload replies using the original review id
                         Toast.makeText(ReviewDetailActivity.this, "Reply added", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(ReviewDetailActivity.this, "Failed to add reply", Toast.LENGTH_SHORT).show();
