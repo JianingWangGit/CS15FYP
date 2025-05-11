@@ -9,7 +9,7 @@ public class ApiClient {
     // else if physical device (Same WIFI network for the laptop and phone):
     // run ipconfig in your laptop to get the IPv4 Address.
     // change to your IP when testing on device
-    private static final String BASE_URL = "http://118.138.72.79:2001/";
+    private static final String BASE_URL = "http://10.0.2.2:2001/";
     //"http://192.168.59.248:2001/" "http://118.138.80.225:2001/"; "http://118.138.73.188:2001/
     private static Retrofit retrofit;
 
@@ -31,4 +31,5 @@ public class ApiClient {
     public static RestaurantService getRestaurantApi() {
         return getClient().create(RestaurantService.class);
     }
+
 }

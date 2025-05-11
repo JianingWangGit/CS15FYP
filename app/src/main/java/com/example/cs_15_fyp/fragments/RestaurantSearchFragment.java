@@ -194,8 +194,16 @@ public class RestaurantSearchFragment extends Fragment implements RestaurantAdap
             Intent intent = new Intent(getContext(), InfoRestaurantActivity.class);
             intent.putExtra("restaurantName", restaurant.getName());
             intent.putExtra("restaurantId", restaurant.getId());
+            intent.putExtra("averageRating", restaurant.getRating());
             startActivity(intent);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRestaurants();  //  re-fetch restaurants and ratings when fragment becomes visible
+    }
+
 
 }

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewAdapter;
@@ -37,6 +38,15 @@ public class AllReviewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_reviews);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("All Reviews");
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         // Receive restaurantId
         Intent intent = getIntent();
         if (intent != null) {
@@ -46,7 +56,7 @@ public class AllReviewsActivity extends AppCompatActivity {
         // Setup RecyclerView and Adapter
         allReviewsRecyclerView = findViewById(R.id.allReviewsRecyclerView);
         allReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        reviewAdapter = new ReviewAdapter(new ArrayList<>());
+        reviewAdapter = new ReviewAdapter(this, new ArrayList<>());
         allReviewsRecyclerView.setAdapter(reviewAdapter);
 
         reviewAdapter.setOnItemClickListener(review -> {

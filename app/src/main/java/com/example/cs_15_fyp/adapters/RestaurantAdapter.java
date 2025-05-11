@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.models.Restaurant;
 
@@ -96,8 +98,17 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Re
                     restaurant.isOpen() ? android.R.color.holo_green_dark : android.R.color.holo_red_dark
             ));
 
-            // Set placeholder image
-            restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
+            // Load image from URL using Glide
+            if (restaurant.getImageUrl() != null && !restaurant.getImageUrl().isEmpty()) {
+                Glide.with(itemView.getContext())
+                    .load(restaurant.getImageUrl())
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .placeholder(R.drawable.placeholder_restaurant)
+                    .error(R.drawable.placeholder_restaurant)
+                    .into(restaurantImage);
+            } else {
+                restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
+            }
         }
 
         private String getPriceRangeText(double priceRange) {

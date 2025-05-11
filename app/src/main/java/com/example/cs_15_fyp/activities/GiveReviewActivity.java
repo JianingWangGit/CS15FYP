@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -26,18 +27,20 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ImagePagerAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Review;
+import com.example.cs_15_fyp.utils.FirebaseStorageHelper;
 
 import java.io.InputStream;
 
 
 public class GiveReviewActivity extends AppCompatActivity {
-
+    private static final String TAG = "GiveReviewActivity";
     private RatingBar ratingBar;
     private TextView ratingDisplay;
     private EditText editTextReview;
@@ -55,6 +58,18 @@ public class GiveReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_give_review);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Write a Review");
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+
+        // Initialize Firebase Storage
+        FirebaseStorageHelper.initialize(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -125,19 +140,6 @@ public class GiveReviewActivity extends AppCompatActivity {
         imagePickerLauncher.launch(Intent.createChooser(intent, "Select Pictures"));
     }
 
-    private String convertImageUriToBase64(Uri uri) {
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            inputStream.close();
-            return Base64.encodeToString(bytes, Base64.NO_WRAP); // NO_WRAP is cleaner
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     private void submitReview() {
         String comment = editTextReview.getText().toString().trim();
         float rating = ratingBar.getRating();
@@ -150,28 +152,47 @@ public class GiveReviewActivity extends AppCompatActivity {
         // Get restaurantId from intent
         String restaurantId = getIntent().getStringExtra("restaurantId");
         if (restaurantId == null || restaurantId.isEmpty()) {
-            Toast.makeText(this, "Restaurant ID is missing in Intent!", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Received restaurant ID: " + restaurantId, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        // Convert photos
-        List<String> base64Photos = new ArrayList<>();
-//        for (Uri uri : imageUris) {
-//            String base64 = convertImageUriToBase64(uri);
-//            if (base64 != null) {
-//                base64Photos.add(base64);
-//            }
-//        }
+        if (imageUris.isEmpty()) {
+            // No images to upload, submit review directly
+            submitReviewToApi(restaurantId, comment, rating, new ArrayList<>());
+        } else {
+            // Show upload in progress
+            btnSubmitReview.setEnabled(false);
+            Toast.makeText(this, "Uploading your photos, please wait...", Toast.LENGTH_SHORT).show();
+            
+            // Upload images to Firebase Storage
+            FirebaseStorageHelper.uploadReviewImages(imageUris)
+                .thenAccept(downloadUrls -> {
+                    // Images uploaded successfully, submit review with image URLs
+                    runOnUiThread(() -> {
+                        submitReviewToApi(restaurantId, comment, rating, downloadUrls);
+                    });
+                })
+                .exceptionally(e -> {
+                    // Handle upload failure
+                    runOnUiThread(() -> {
+                        Toast.makeText(GiveReviewActivity.this, 
+                            "Upload failed. Please check your internet connection and try again.", Toast.LENGTH_LONG).show();
+                        btnSubmitReview.setEnabled(true);
+                    });
+                    return null;
+                });
+        }
+    }
 
+    private void submitReviewToApi(String restaurantId, String comment, float rating, List<String> photoUrls) {
         // Submit Review with restaurantId
-        Review review = new Review(restaurantId, "user123", comment, rating, base64Photos);
+        Review review = new Review(restaurantId, "user123", comment, rating, photoUrls);
 
         reviewApi.submitReview(review).enqueue(new Callback<Review>() {
             @Override
             public void onResponse(Call<Review> call, Response<Review> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(GiveReviewActivity.this, "Review submitted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(GiveReviewActivity.this, "Thank you! Your review has been submitted.", Toast.LENGTH_SHORT).show();
                     editTextReview.setText("");
                     ratingBar.setRating(0f);
                     imageUris.clear();
@@ -184,14 +205,15 @@ public class GiveReviewActivity extends AppCompatActivity {
                     finish();
                 } else {
                     Toast.makeText(GiveReviewActivity.this, "Submission failed: " + response.code(), Toast.LENGTH_SHORT).show();
+                    btnSubmitReview.setEnabled(true);
                 }
             }
 
             @Override
             public void onFailure(Call<Review> call, Throwable t) {
                 Toast.makeText(GiveReviewActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                btnSubmitReview.setEnabled(true);
             }
         });
     }
-
 }

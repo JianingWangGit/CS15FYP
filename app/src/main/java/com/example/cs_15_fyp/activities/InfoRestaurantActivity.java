@@ -2,11 +2,13 @@ package com.example.cs_15_fyp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -14,22 +16,31 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
+import com.example.cs_15_fyp.api.RestaurantService;
 import com.example.cs_15_fyp.api.ReviewApi;
+import com.example.cs_15_fyp.models.ApiResponse;
+import com.example.cs_15_fyp.models.Restaurant;
 import com.example.cs_15_fyp.models.Review;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class InfoRestaurantActivity extends AppCompatActivity {
 
     private ReviewAdapter adapter;
-    private String restaurantId;  // ✅ Correct type = String
+    private String restaurantId;
     private String restaurantNameText;
+    private TextView ratingNumberText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,26 +53,27 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         // UI Elements
         Button btnGoToGiveReview = findViewById(R.id.btnGoToGiveReview);
         Button btnSeeAllReviews = findViewById(R.id.btnSeeAllReviews);
         EditText searchBar = findViewById(R.id.searchBar);
         TextView restaurantName = findViewById(R.id.restaurantName);
-        // RecyclerView setup
+        ratingNumberText = findViewById(R.id.ratingNumber);
         RecyclerView reviewRecyclerView = findViewById(R.id.reviewRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ReviewAdapter(new ArrayList<>());
+        adapter = new ReviewAdapter(this, new ArrayList<>());
         reviewRecyclerView.setAdapter(adapter);
 
-        // Write a Review button
-        btnGoToGiveReview.setOnClickListener(v -> {
-            Intent intent = new Intent(this, GiveReviewActivity.class);
-            intent.putExtra("restaurantId", restaurantId);  // ✅ pass as String
-            intent.putExtra("restaurantName", restaurantNameText);
-            startActivity(intent);
-        });
-
-        // Receive intent data
+        // Get data from intent
         Intent received = getIntent();
         if (received != null) {
             restaurantNameText = received.getStringExtra("restaurantName");
@@ -72,21 +84,64 @@ public class InfoRestaurantActivity extends AppCompatActivity {
             }
         }
 
+        if (restaurantNameText == null) restaurantNameText = "Restaurant Info";
         restaurantName.setText(restaurantNameText);
+        getSupportActionBar().setTitle(restaurantNameText); // dynamic title
 
-        // See All Reviews button
-        btnSeeAllReviews.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AllReviewsActivity.class);
-            intent.putExtra("restaurantId", restaurantId);  // ✅ pass as String
+        btnGoToGiveReview.setOnClickListener(v -> {
+            Intent intent = new Intent(this, GiveReviewActivity.class);
+            intent.putExtra("restaurantId", restaurantId);
+            intent.putExtra("restaurantName", restaurantNameText);
             startActivity(intent);
         });
 
-        // Load preview reviews
+        btnSeeAllReviews.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AllReviewsActivity.class);
+            intent.putExtra("restaurantId", restaurantId);
+            startActivity(intent);
+        });
+
+        loadRestaurantDetails();
         loadPreviewReviews();
     }
 
+    private void loadRestaurantDetails() {
+        RestaurantService restaurantService = ApiClient.getRestaurantApi();
+        restaurantService.getAllRestaurants().enqueue(new Callback<ApiResponse<List<Restaurant>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<Restaurant>>> call, Response<ApiResponse<List<Restaurant>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Restaurant r : response.body().getData()) {
+                        if (r.getId().equals(restaurantId)) {
+                            ratingNumberText.setText(String.format("%.1f", r.getRating()));
+                            
+                            // Load restaurant image
+                            ImageView restaurantImage = findViewById(R.id.restaurantImage);
+                            if (r.getImageUrl() != null && !r.getImageUrl().isEmpty()) {
+                                Glide.with(InfoRestaurantActivity.this)
+                                    .load(r.getImageUrl())
+                                    .transition(DrawableTransitionOptions.withCrossFade())
+                                    .placeholder(R.drawable.placeholder_restaurant)
+                                    .error(R.drawable.placeholder_restaurant)
+                                    .into(restaurantImage);
+                            } else {
+                                restaurantImage.setImageResource(R.drawable.placeholder_restaurant);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<Restaurant>>> call, Throwable t) {
+                Log.e("InfoRestaurant", "Failed to load restaurant rating", t);
+            }
+        });
+    }
+
     private void loadPreviewReviews() {
-        if (restaurantId == null || restaurantId.isEmpty()) return;  // no valid ID
+        if (restaurantId == null || restaurantId.isEmpty()) return;
 
         Retrofit retrofit = ApiClient.getClient();
         ReviewApi reviewApi = retrofit.create(ReviewApi.class);
@@ -109,6 +164,7 @@ public class InfoRestaurantActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadPreviewReviews();  // refresh on return
+        loadRestaurantDetails();
+        loadPreviewReviews();
     }
 }
