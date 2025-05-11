@@ -41,7 +41,8 @@ const restaurantSchema = new mongoose.Schema({
         required: true,
         min: 1,
         max: 4
-    }
+    },
+    businessUserId: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema);

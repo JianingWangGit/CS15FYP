@@ -4,31 +4,6 @@ const Restaurant = require('../models/restaurant_model');
 const Review = require('../models/review_model');
 const mongoose = require('mongoose');
 
-// Helper function to update restaurant rating
-async function updateRestaurantRating(restaurantId) {
-    try {
-        console.log('Updating rating for restaurant:', restaurantId);
-        const allReviews = await Review.find({ restaurantId: new mongoose.Types.ObjectId(restaurantId) });
-        console.log('Found reviews:', allReviews.length);
-
-        if (allReviews.length > 0) {
-            const avg = allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length;
-            console.log('Calculated average rating:', avg);
-
-            const updatedRestaurant = await Restaurant.findByIdAndUpdate(
-                restaurantId,
-                { rating: avg },
-                { new: true }
-            );
-            console.log('Updated restaurant:', updatedRestaurant);
-            return updatedRestaurant;
-        }
-    } catch (error) {
-        console.error('Error updating restaurant rating:', error);
-        throw error;
-    }
-}
-
 // GET all restaurants
 router.get('/', async (req, res) => {
     try {
@@ -99,6 +74,28 @@ router.get('/search', async (req, res) => {
         console.error('Error in GET /search:', error);
         res.status(500).json({ success: false, error: error.message });
     }
+});
+
+router.post('/', async (req, res) => {
+  try {
+    const restaurant = new Restaurant(req.body);
+    await restaurant.save();
+    res.status(201).json({ message: 'Restaurant created', data: restaurant });
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: 'Failed to create restaurant' });
+  }
+});
+
+// GET /restaurants/business/:uid
+router.get('/business/:uid', async (req, res) => {
+  try {
+    const uid = req.params.uid;
+    const restaurants = await Restaurant.find({ businessUserId: uid });
+    res.json({ data: restaurants });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch restaurants' });
+  }
 });
 
 module.exports = router;

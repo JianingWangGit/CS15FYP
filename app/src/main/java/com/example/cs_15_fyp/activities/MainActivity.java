@@ -2,7 +2,6 @@ package com.example.cs_15_fyp.activities;
 
 import android.os.Bundle;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,10 +17,10 @@ import com.example.cs_15_fyp.fragments.RestaurantSearchFragment;
 import com.example.cs_15_fyp.fragments.UserProfileFragment;
 import com.example.cs_15_fyp.fragments.BusinessProfileFragment;
 
-
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
+    private ActivityMainBinding binding;
+    private String userType;  // store globally to avoid repeating getIntent().getStringExtra()
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +28,26 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        String userType = getIntent().getStringExtra("userType");
-        Fragment profileFragment = (userType != null && userType.equals("business"))
-                ? new BusinessProfileFragment()
-                : new UserProfileFragment();
+        // Grab user type from login redirection
+        userType = getIntent().getStringExtra("userType");
 
-        replaceFragment(profileFragment);
+        // Default fragment on launch = Search
+        if (savedInstanceState == null) {
+            replaceFragment(new RestaurantSearchFragment());
+            binding.bottomNavigationView.setSelectedItemId(R.id.search);
+        }
 
+        // Apply edge insets for modern UI
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Bottom nav bar logic
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
+
             if (id == R.id.notifications) {
                 replaceFragment(new NotificationsFragment());
                 return true;
@@ -51,27 +55,24 @@ public class MainActivity extends AppCompatActivity {
                 replaceFragment(new RestaurantSearchFragment());
                 return true;
             } else if (id == R.id.profile) {
-                // Show correct profile fragment based on userType
-                Fragment frag = (userType != null && userType.equals("business"))
-                        ? new BusinessProfileFragment()
-                        : new UserProfileFragment();
+                // Load correct profile
+                Fragment frag = isBusiness() ? new BusinessProfileFragment() : new UserProfileFragment();
                 replaceFragment(frag);
                 return true;
             } else {
                 return false;
             }
         });
+    }
 
-        if (savedInstanceState == null) {
-            replaceFragment(new RestaurantSearchFragment());
-            binding.bottomNavigationView.setSelectedItemId(R.id.search);
-        }
+    private boolean isBusiness() {
+        return userType != null && userType.equalsIgnoreCase("business");
     }
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout,fragment);
-        fragmentTransaction.commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.commit();
     }
 }
