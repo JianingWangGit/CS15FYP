@@ -26,25 +26,5 @@ public interface ReviewApi {
     @POST("/reviews")
     Call<Review> submitReview(@Body Review review);
 
-    @GET("reviews/{id}/replies")
-    Call<List<Reply>> getReplies(@Path("id") String reviewId);
-    @POST("reviews/{id}/reply")
-    Call<Review> postReply(
-        @Path("id") String reviewId,
-        @Body Reply reply
-    );
-    @PUT("/reviews/{id}/replies/{replyId}")
-    Call<Review> updateReply(
-            @Path("id") String reviewId,
-            @Path("replyId") String replyId,
-            @Body Reply reply
-    );
-
-    @HTTP(method = "DELETE", path = "/reviews/{id}/replies/{replyId}", hasBody = true)
-    Call<Review> deleteReply(
-            @Path("id") String reviewId,
-            @Path("replyId") String replyId,
-            @Body String email
-    );
 }
 

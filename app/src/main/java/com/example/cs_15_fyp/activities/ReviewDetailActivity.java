@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.adapters.ReviewImageAdapter;
 import com.example.cs_15_fyp.api.ApiClient;
+import com.example.cs_15_fyp.api.ReplyApi;
 import com.example.cs_15_fyp.api.ReviewApi;
 import com.example.cs_15_fyp.models.Reply;
 import com.example.cs_15_fyp.models.Review;
@@ -45,6 +46,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
     private Review review;
     private ReviewApi reviewApi;
+    private ReplyApi replyApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
 
         // Initialize API
         reviewApi = ApiClient.getReviewApi();
+        replyApi = ApiClient.getReplyApi();
 
         // Bind views
         repliesContainer = findViewById(R.id.detailReplies);
@@ -109,7 +112,7 @@ public class ReviewDetailActivity extends AppCompatActivity {
     }
 
     private void loadReplies(String reviewId) {
-        reviewApi.getReplies(reviewId).enqueue(new Callback<List<Reply>>() {
+        replyApi.getReplies(reviewId).enqueue(new Callback<List<Reply>>() {
             @Override
             public void onResponse(Call<List<Reply>> call, Response<List<Reply>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -177,19 +180,19 @@ public class ReviewDetailActivity extends AppCompatActivity {
             Reply newReply = new Reply(email, username, comment);
 
             // Call backend
-            reviewApi.postReply(review.getId(), newReply).enqueue(new Callback<Review>() {
+            replyApi.postReply(review.getId(), newReply).enqueue(new Callback<Reply>() {
                 @Override
-                public void onResponse(Call<Review> call, Response<Review> response) {
+                public void onResponse(Call<Reply> call, Response<Reply> response) {
                     if (response.isSuccessful()) {
-                        // DON’T do: review = response.body();
-                        loadReplies(review.getId());    // reload using the original id
+                        loadReplies(review.getId());    // reload replies using the original review id
                         Toast.makeText(ReviewDetailActivity.this, "Reply added", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(ReviewDetailActivity.this, "Failed to add reply", Toast.LENGTH_SHORT).show();
                     }
                 }
+
                 @Override
-                public void onFailure(Call<Review> call, Throwable t) {
+                public void onFailure(Call<Reply> call, Throwable t) {
                     Toast.makeText(ReviewDetailActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
