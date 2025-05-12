@@ -17,6 +17,8 @@ import com.example.cs_15_fyp.models.Review;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,12 +38,13 @@ public class MyReviewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_reviews);
 
-        userId = getIntent().getStringExtra("userId");
-        if (userId == null || userId.isEmpty()) {
-            Toast.makeText(this, "User ID not found", Toast.LENGTH_SHORT).show();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Not logged in", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
+        userId = currentUser.getUid(); // Automatically get UID from FirebaseAuth
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,6 +71,7 @@ public class MyReviewsActivity extends AppCompatActivity {
 
         loadUserReviews();
     }
+
 
     private void loadUserReviews() {
         isLoading = true;
