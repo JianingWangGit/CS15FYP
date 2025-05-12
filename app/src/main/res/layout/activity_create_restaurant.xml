@@ -14,10 +14,10 @@
             android:id="@+id/input_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Restaurant Name"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/edittext_rounded_border"
-            android:padding="12dp"
-            android:layout_marginBottom="12dp" />
+            android:hint="Restaurant Name"
+            android:padding="12dp" />
 
         <EditText
             android:id="@+id/input_description"
