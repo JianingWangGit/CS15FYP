@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Restaurant Image -->
+            <ImageView
+                android:id="@+id/restaurant_image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/edittext_rounded_border"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_profile_placeholder" />
+
+            <!-- Upload Image Button -->
+            <Button
+                android:id="@+id/btn_upload_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Image"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="#DDDDDD"
+                android:textColor="#000000" />
+
+            <!-- Restaurant Name -->
+            <EditText
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Restaurant Name"
+                android:background="@drawable/edittext_rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Description -->
+            <EditText
+                android:id="@+id/input_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Description"
+                android:background="@drawable/edittext_rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Cuisine Type -->
+            <EditText
+                android:id="@+id/input_cuisine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cuisine Type"
+                android:background="@drawable/edittext_rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Address -->
+            <EditText
+                android:id="@+id/input_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:background="@drawable/edittext_rounded_border"
+                android:padding="12dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Update Button -->
+            <Button
+                android:id="@+id/btn_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Restaurant"
+                android:backgroundTint="#4CAF50"
+                android:textColor="@android:color/white"
+                android:padding="12dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout> 
