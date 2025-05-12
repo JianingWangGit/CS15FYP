@@ -94,6 +94,17 @@
                 android:text="Update Restaurant"
                 android:backgroundTint="#4CAF50"
                 android:textColor="@android:color/white"
+                android:padding="12dp"
+                android:layout_marginBottom="16dp" />
+                
+            <!-- Edit Opening Hours Button -->
+            <Button
+                android:id="@+id/btn_edit_hours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Opening Hours"
+                android:backgroundTint="#2196F3"
+                android:textColor="@android:color/white"
                 android:padding="12dp" />
 
         </LinearLayout>

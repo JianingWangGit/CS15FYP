@@ -36,7 +36,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
     private static final String TAG = "EditRestaurantActivity";
     private EditText nameInput, descInput, cuisineInput, addressInput;
     private ImageView restaurantImage;
-    private Button btnUpdate, btnUploadImage;
+    private Button btnUpdate, btnUploadImage, btnEditHours;
     private Restaurant currentRestaurant;
     private Uri selectedImageUri;
     private ActivityResultLauncher<Intent> imagePickerLauncher;
@@ -67,6 +67,7 @@ public class EditRestaurantActivity extends AppCompatActivity {
         restaurantImage = findViewById(R.id.restaurant_image);
         btnUpdate = findViewById(R.id.btn_update);
         btnUploadImage = findViewById(R.id.btn_upload_image);
+        btnEditHours = findViewById(R.id.btn_edit_hours);
 
         // Get restaurant ID from intent
         String restaurantId = getIntent().getStringExtra("restaurantId");
@@ -93,6 +94,11 @@ public class EditRestaurantActivity extends AppCompatActivity {
         // Setup click listeners
         btnUploadImage.setOnClickListener(v -> openImagePicker());
         btnUpdate.setOnClickListener(v -> updateRestaurant());
+        btnEditHours.setOnClickListener(v -> {
+            Intent intent = new Intent(EditRestaurantActivity.this, EditHoursActivity.class);
+            intent.putExtra("restaurantId", currentRestaurant.getId());
+            startActivityForResult(intent, 2); // Use a different request code than the image picker
+        });
     }
 
     private void loadRestaurantData(String restaurantId) {

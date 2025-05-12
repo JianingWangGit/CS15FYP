@@ -19,6 +19,7 @@ import com.example.cs_15_fyp.R;
 import com.example.cs_15_fyp.activities.AllReviewsActivity;
 import com.example.cs_15_fyp.activities.CreateRestaurantActivity;
 import com.example.cs_15_fyp.activities.EditRestaurantActivity;
+import com.example.cs_15_fyp.activities.EditHoursActivity;
 import com.example.cs_15_fyp.activities.LoginActivity;
 import com.example.cs_15_fyp.api.ApiClient;
 import com.example.cs_15_fyp.api.RestaurantService;
@@ -37,6 +38,7 @@ public class BusinessProfileFragment extends Fragment {
 
     private static final int REQUEST_CREATE_RESTAURANT = 101;
     private static final int REQUEST_EDIT_RESTAURANT = 102;
+    private static final int REQUEST_EDIT_HOURS = 103;
 
     private LinearLayout businessContent, emptyRestaurantSection;
     private TextView businessNameView;
@@ -80,6 +82,18 @@ public class BusinessProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), EditRestaurantActivity.class);
                 intent.putExtra("restaurantId", myRestaurant.getId());
                 startActivityForResult(intent, REQUEST_EDIT_RESTAURANT);
+            } else {
+                Toast.makeText(getActivity(), "Restaurant not found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Edit Restaurant Hours
+        LinearLayout editHoursSection = view.findViewById(R.id.editHoursSection);
+        editHoursSection.setOnClickListener(v -> {
+            if (myRestaurant != null) {
+                Intent intent = new Intent(getActivity(), EditHoursActivity.class);
+                intent.putExtra("restaurantId", myRestaurant.getId());
+                startActivityForResult(intent, REQUEST_EDIT_HOURS);
             } else {
                 Toast.makeText(getActivity(), "Restaurant not found", Toast.LENGTH_SHORT).show();
             }
@@ -150,7 +164,9 @@ public class BusinessProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == REQUEST_CREATE_RESTAURANT || requestCode == REQUEST_EDIT_RESTAURANT) 
+        if ((requestCode == REQUEST_CREATE_RESTAURANT || 
+             requestCode == REQUEST_EDIT_RESTAURANT || 
+             requestCode == REQUEST_EDIT_HOURS) 
                 && resultCode == Activity.RESULT_OK) {
             fetchBusinessRestaurant(); // Refresh data after creating/editing a restaurant
         }
