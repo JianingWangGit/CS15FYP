@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.activity:activity:1.10.1")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     testImplementation(libs.junit)
+    testImplementation("org.mockito:mockito-core:5.2.0")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("com.google.android.gms:play-services-auth:20.7.0")

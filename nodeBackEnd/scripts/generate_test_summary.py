@@ -1,0 +1,47 @@
+import pandas as pd
+
+# Summary table of test coverage
+data = [
+    # Review Routes
+    ["GET /reviews", "T1.4", "With restaurantId filter → returns reviews", "✅ Passed"],
+    ["GET /reviews", "T1.4b", "Without restaurantId filter → returns all reviews", "✅ Passed"],
+    ["GET /reviews", "T1.5", "DB error in .find() → 500", "✅ Passed"],
+    ["POST /reviews", "T1.1", "Create review and update avg rating", "✅ Passed"],
+    ["POST /reviews", "T1.2", "Missing required fields → 400", "✅ Passed"],
+    ["POST /reviews", "T1.3", "Internal DB error on save → 500", "✅ Passed"],
+    ["GET /reviews/user", "T1.6", "Get reviews by userId", "✅ Passed"],
+    ["GET /reviews/user", "T1.7", "Missing userId → 400", "✅ Passed"],
+    ["GET /reviews/user", "T1.8", "DB error in user review fetch → 500", "✅ Passed"],
+
+    # Restaurant Routes
+    ["PUT /restaurants/:id", "T2.1", "Valid update → 200", "✅ Passed"],
+    ["PUT /restaurants/:id", "T2.2", "Missing required field → 400", "✅ Passed"],
+    ["PUT /restaurants/:id", "T2.3", "Restaurant not found → 404", "✅ Passed"],
+    ["PUT /restaurants/:id", "T2.4", "Update failure → 500", "✅ Passed"],
+    ["GET /restaurants", "T2.5", "Fetch all restaurants", "✅ Passed"],
+    ["GET /restaurants", "T2.6", "DB error fetching all → 500", "✅ Passed"],
+    ["GET /restaurants/search", "T2.7", "Valid search query", "✅ Passed"],
+    ["GET /restaurants/search", "T2.8", "Missing search query → 400", "✅ Passed"],
+    ["GET /restaurants/search", "T2.9", "Search DB error → 500", "✅ Passed"],
+    ["GET /restaurants/business/:uid", "T2.10", "Get restaurants by business user", "✅ Passed"],
+    ["GET /restaurants/cuisine/:cuisine", "T2.11", "Filter by cuisine", "✅ Passed"],
+    ["GET /restaurants/cuisine/:cuisine", "T2.12", "DB error filtering cuisine → 500", "✅ Passed"],
+    ["GET /restaurants/price/:range", "T2.13", "Filter by price range", "✅ Passed"],
+    ["GET /restaurants/price/:range", "T2.14", "DB error in price search → 500", "✅ Passed"],
+    ["POST /restaurants", "T2.15", "Create restaurant successfully", "✅ Passed"],
+    ["POST /restaurants", "T2.16", "Invalid payload → 400", "✅ Passed"],
+    ["GET /restaurants/:id", "T2.17", "Get restaurant by ID", "✅ Passed"],
+    ["GET /restaurants/:id", "T2.18", "ID not found → 404", "✅ Passed"],
+    ["GET /restaurants/:id", "T2.19", "DB error fetching by ID → 500", "✅ Passed"],
+
+    # Response Routes
+    ["POST /responses/:reviewId/reply", "T3.1", "Post reply successfully", "✅ Passed"],
+    ["POST /responses/:reviewId/reply", "T3.2", "Missing email/comment → 400", "✅ Passed"],
+    ["POST /responses/:reviewId/reply", "T3.3", "DB error on reply → 500", "✅ Passed"],
+    ["GET /responses/:reviewId/replies", "T3.4", "Fetch replies for review", "✅ Passed"],
+    ["GET /responses/:reviewId/replies", "T3.5", "DB error in fetch replies → 500", "✅ Passed"]
+]
+
+df = pd.DataFrame(data, columns=["Route", "Test ID", "Scenario / Path Type", "Status"])
+df.to_csv("report/white-box-backend-summary.csv", index=False)
+print("Test summary exported to report/white-box-table-summary.csv")

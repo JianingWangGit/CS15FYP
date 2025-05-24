@@ -1,8 +1,7 @@
 /**
- * @file review_routes.js
+ * @file routers/review_routes.js
  * @description Routes for handling review-related requests
  */
-
 const express = require('express');
 const router = express.Router();
 const Review = require('../models/review_model');
