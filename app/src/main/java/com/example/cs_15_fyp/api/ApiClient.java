@@ -10,7 +10,7 @@ public class ApiClient {
     // run ipconfig in your laptop to get the IPv4 Address.
     // change to your IP when testing on device
 
-    private static final String BASE_URL = "http://118.138.119.34:2001/";
+    private static final String BASE_URL = "http://118.138.70.92:2001/";
     //"http://192.168.59.248:2001/" "http://118.138.80.225:2001/"; "http://118.138.73.188:2001/
     private static Retrofit retrofit;
 

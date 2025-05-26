@@ -1,0 +1,7 @@
+Component,Test ID,Scenario / Path Type,Status
+AuthInputValidator,F1.1,Email and password format validation,Passed
+GiveReviewValidator,F1.2,"Rating bounds, restaurant ID, and user login state",Passed
+OpeningHoursValidator,F1.3,24-hour format validation for opening/closing times,Passed
+RestaurantFilterUtils,F1.4,"Filter logic: price, cuisine, both, no match",Passed
+RestaurantInputValidator,F1.5,"Required name, desc, cuisine, address fields",Passed
+ReviewInputValidator,F1.6,"Rating, comment length, restaurant ID validity",Passed
